@@ -25,8 +25,8 @@ SECRET_KEY = '+t$a=oe_sg98mqb=fotbmtdknd14^i84n+2hdcl!(lbc$e0764'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Needed to allow connection from the exterior with a domain name
-ALLOWED_HOSTS = ['inc56.cs-campus.fr']
+# Needed to allow connection from the exterior with a domain name and also from localhost
+ALLOWED_HOSTS = ['inc56.cs-campus.fr', '127.0.0.1']
 
 
 # Application definition
