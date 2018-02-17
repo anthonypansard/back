@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 class Appareil(models.Model):
 	nom = models.CharField(max_length=42)
 	code_IMEI = models.BigIntegerField()
+	
+	def __str__(self):
+		return self.nom
 
 class Beamy(models.Model):
 	nom = models.CharField(max_length=42)
