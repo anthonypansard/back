@@ -28,6 +28,12 @@ class Appareils_User_Admin(admin.ModelAdmin):
     readonly_fields = ('id',)
     search_fields   = ('id_appareil', 'id_user',)
 
+class Alarm_Admin(admin.ModelAdmin):
+    list_display    = ('due_date', 'id_beamy', 'state', 'delay',)
+    list_filter     = ('id_beamy__id', 'state',)
+    readonly_fields = ('id',)
+    search_fields   = ('due_date', 'state', 'id_beamy__nom')
+
 
 admin.site.register(Appareil, Appareil_Admin)
 admin.site.register(Beamy, Beamy_Admin)
@@ -36,3 +42,4 @@ admin.site.register(Parametre)
 admin.site.register(Beamy_User, Beamy_User_Admin)
 admin.site.register(Appareils_User, Appareils_User_Admin)
 admin.site.register(Fichiers_User)
+admin.site.register(Alarm, Alarm_Admin)
