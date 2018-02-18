@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from .models import Appareil, Beamy, Fichier, Parametre, Beamy_User, Appareils_User, Fichiers_User, Alarm
 
 # Register your models here.
 

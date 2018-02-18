@@ -5,11 +5,11 @@ import datetime, pytz
 
 # Create your models here.
 
-# Set default alarm hours based on beamy's time zone (time zone not implemented yet)
-# Still partially broken
-# Will need to be changed when creating alarms from beamote
 
 def now_plus_1_hour():
+	"""
+	Return current time in `Europe/Paris` time zone as a datetime object
+	"""
 	timezone.activate('Europe/Paris')
 	return timezone.now().astimezone(tz=pytz.timezone('Europe/Paris')) + datetime.timedelta(hours=1)
 
@@ -50,6 +50,10 @@ class Fichiers_User(models.Model):
 	droit = models.CharField(max_length=42)
 
 class Alarm(models.Model):
+	"""
+	Class to save alarm information in database.
+	More work needs to be done with timezone management. Maybe link each beamy to it's timezone and display the right timezone in the app ?
+	"""
 	due_date = models.DateTimeField(default = now_plus_1_hour)
 	id_beamy = models.ForeignKey('Beamy', on_delete=models.CASCADE)
 	state = models.CharField(default = 'set', max_length=42)
@@ -57,4 +61,8 @@ class Alarm(models.Model):
 	# lack of id_music
 
 	def time_until_ring(self):
+		"""
+		Quick access the remaining time before the alarm starts ringing
+		To be deleted if not used in the app or the beamy
+		"""
 		return self.due_date - timezone.now()
