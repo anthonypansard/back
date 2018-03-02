@@ -54,15 +54,10 @@ class Alarm(models.Model):
 	Class to save alarm information in database.
 	More work needs to be done with timezone management. Maybe link each beamy to it's timezone and display the right timezone in the app ?
 	"""
-	due_date = models.DateTimeField(default = now_plus_1_hour)
+	day = models.CharField(default= 'lundi', max_length=42)
+	hour = models.IntegerField(default = 0)
+	minute = models.IntegerField(default = 0)
 	id_beamy = models.ForeignKey('Beamy', on_delete=models.CASCADE)
 	state = models.CharField(default = 'set', max_length=42)
 	delay = models.DurationField(default = datetime.timedelta(minutes=5))
 	# lack of id_music
-
-	def time_until_ring(self):
-		"""
-		Quick access the remaining time before the alarm starts ringing
-		To be deleted if not used in the app or the beamy
-		"""
-		return self.due_date - timezone.now()

@@ -29,7 +29,7 @@ class Appareils_User_Admin(admin.ModelAdmin):
     search_fields   = ('id_appareil', 'id_user',)
 
 class Alarm_Admin(admin.ModelAdmin):
-    list_display    = ('due_date', 'id_beamy', 'state', 'delay',)
+    list_display    = ('id_beamy', 'state', 'delay',)
     list_filter     = ('id_beamy__id', 'state',)
     readonly_fields = ('id',)
     search_fields   = ('due_date', 'state', 'id_beamy__nom')
