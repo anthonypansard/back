@@ -57,7 +57,7 @@ class Alarm(models.Model):
 	day = models.CharField(default= 'lundi', max_length=42)
 	hour = models.IntegerField(default = 0)
 	minute = models.IntegerField(default = 0)
-	id_beamy = models.ForeignKey('Beamy', on_delete=models.CASCADE)
+	id_beamy = models.ForeignKey('Beamy', on_delete=models.CASCADE, default = 1)
 	state = models.CharField(default = 'set', max_length=42)
 	delay = models.DurationField(default = datetime.timedelta(minutes=5))
 	# lack of id_music
