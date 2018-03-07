@@ -83,9 +83,9 @@ def alarm(request):
 		hour 	 = int(tree.xpath("/alarm/time/hour")[0].text)
 		minute 	 = int(tree.xpath("/alarm/time/minute")[0].text)
 		state	 = tree.xpath("/alarm/state")[0].text
-		id_beamy = int(tree.xpath("/alarm/id_beamy")[0].text)
+		beamy_id = int(tree.xpath("/alarm/beamy_id")[0].text)
 		
-		beamy = Beamy.objects.get(pk = id_beamy)
+		beamy = Beamy.objects.get(pk = beamy_id)
 
 		alarm = Alarm(day = day,
 					  hour = hour,
