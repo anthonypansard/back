@@ -1,43 +1,51 @@
-# INC56
+# Backend for inc56
 
-## Getting started
+## Table of contents
 
-### System Requirements
+* [What is inc56](#what-is-inc56)
+* [What is in this repository ?](#what-is-in-this-repository)
+* [Requirements](#requirements)
+* [Folder structure](#folder-structure)
+* [How to use ?](#how-to-use)
 
-Python `3.6`
-Django `2.0`
+## What is inc56
 
-### Setup Django
+The "inc56" project is a complete infrastructure including :
 
-Go to the `back` directory
+* *A connected multimedia object* that can be remotely controled
+* *A mobile device* with an application to manage the client account / the connected object
+* *A server infrastructure* to hold data and manage the interactions between the mobile device and the connected object
 
-```sh
-cd back
+This project takes part of a first year course at the engineer school CentraleSupélec
+
+## What is in this repository
+
+Here is the code for the server infrastructure. It is built using the python framework [Django](https://www.djangoproject.com/).
+It is still under construction and largely incomplete
+
+## Requirements
+
+This project uses python `3.6` and Django `2.0`
+The python package `lxml` is also required
+
+## Folder structure
+
+```
+back/
+	README.md			-> This file
+	api/			    -> Folder for the `api` application
+		urls.py			-> Url redirections for the API
+		views.py		-> Request processing and response
+	back/				-> Main folder of the project
+		settings.py		-> Settings for Django
+		urls.py			-> Urls base for the applications
+	BDD/				-> Folder for the `BDD` application
+		admin.py		-> Customization for the default admin interface
+		models.py		-> Database models
+	docs/				-> Documentation
+		index.md
 ```
 
-Synchronize the databases
+## How to use
 
-```sh
-python manage.py makemigrations # only if changes were made after git pull
-python manage.py migrate
-```
-
-Create a `superuser` account to acces the admin page
-
-```sh
-python manage.py createsuperuser # only before first run
-```
-
-Run the server
-
-```sh
-python manage.py runserver
-```
-
-NB :
-On linux, use `python3` instead of `python`
-
-## Comments
-
-Timezones are not yet well managed. We need to make sure each alarm rings at the right time in the right timezone.
-For example, we live in `Europe/Paris` but Django default timezone is `UTC`.
+The full documentation, including all of the functionalities and the installation procedure can be found [here](docs/index.md).
