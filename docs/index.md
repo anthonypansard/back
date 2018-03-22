@@ -3,6 +3,12 @@
 ## Table of contents
 
 * [Setup Django for developpement testing](#setup-django-for-developpement-testing)
+* [Database](#database)
+* [Endpoints](#endpoints)
+  * [Alarm](#alarm)
+    * [Retrieve alarm list](#retrieve-alarm-list)
+    * [Add alarm](#add-alarm)
+    * [Delete alarm](#delete-alarm)
 * [Comments](#comments)
 
 ## Setup Django for developpement testing
@@ -42,6 +48,177 @@ We have implemented the database using the default `sqlite3` server.
 The current state of the tables is shown in the image below. The `User` table is different as we didn't implement it ourself. It is managed by default by Django. All other tables are defined in `/back/BDD/models.py`.
 
 ![Database architecture](images/database.png)
+
+## Endpoints
+
+The mobile device and the connected object transfert relevant data with the server using an API we designed.
+
+### Alarm
+
+All `xml` files with alarm data embedded have the same basis structure :
+
+```xml
+<alarm>
+	<alarm_id>alarm id</alarm_id>
+	<beamy_id>beamy id</beamy_id>
+	<time>
+		<day>any subset of {lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche}</day>
+		<hour>hour between 0 and 23</hour>
+		<minute>minute between 0 and 59</minute>
+	</time>
+	<state>an element of {set, unset, running}</state>
+</alarm>
+```
+
+All values are treated as strings and no quotation marks are needed
+
+#### Retrieve alarm list
+
+* **URL :**
+
+
+  `GET ~/api/alarm/int:id`
+
+* **URL Param :**
+
+  `id`, optional
+
+* **Data Param :**
+
+  None
+
+
+* **Success reponse :**
+
+  Code : 200
+
+  Content : `text/xml`
+
+  ```xml
+  <?xml version="1.0"?>
+  <ensemble>
+      <alarm>
+          <alarm_id>1</alarm_id>
+          <beamy_id>1</beamy_id>
+          <time>
+              <day>lundi, mardi</day>
+              <hour>8</hour>
+              <minute>3</minute>
+          </time>
+          <state>set</state>
+      </alarm>
+      <alarm>
+      ...
+      </alarm>
+  </ensemble>
+  ```
+
+* **Error response :**
+
+  <_Not yet implemented_>
+
+* **Sample Call :**
+
+  ```sh
+  curl -H "Accept: text/xml" -H "Content-Type: text/xml" -X GET http://localhost:8000/api/alarm/7/
+  ```
+
+* **Notes**
+
+  When a valid `id` parameter is used, the response xml contain only the alarm which internal id is `id`:
+
+  ```xml
+  <alarm>
+  	<alarm_id>id</alarm_id>
+  	<beamy_id>1</beamy_id>
+  	<time>
+  		<day>lundi, mardi</day>
+  		<hour>8</hour>
+  		<minute>3</minute>
+  	</time>
+  	<state>set</state>
+  </alarm>
+  ```
+
+
+#### Add alarm
+
+- **URL :**
+
+  `POST ~/api/alarm/`
+
+- **URL Param :**
+
+  None
+
+- **Data Param :**
+
+  Content : `text/xml`
+
+  ```xml
+  <?xml version="1.0" ?> 
+  <alarm>
+  	<beamy_id>2</beamy_id>
+  	<time>
+  		<day>mercredi</day>
+  		<hour>9</hour>
+  		<minute>56</minute>
+  	</time>
+  	<state>set</state>
+  </alarm>
+  ```
+
+
+- **Success reponse :**
+
+  Code : 200
+
+  Content :  "coucou"
+
+- **Error response :**
+
+  <_Not yet implemented_>
+
+- **Sample Call :**
+
+  ```sh
+  curl -X POST -d @new_alarm.xml http://localhost:8000/api/alarm/
+  ```
+
+- **Notes**
+
+  In the future, the response from the server if all went well should include the new alarm id in the database
+
+#### Delete alarm
+
+- **URL :**
+
+  `DELETE ~/api/alarm/int:id`
+
+- **URL Param :**
+
+  `id`, required
+
+- **Data Param :**
+
+  None
+
+
+- **Success reponse :**
+
+  Code : 200
+
+  Content :  "hello"
+
+- **Error response :**
+
+  <_Not yet implemented_>
+
+- **Sample Call :**
+
+  ```sh
+  curl -X DELETE http://localhost:8000/api/alarm/5/
+  ```
 
 ## Comments
 
