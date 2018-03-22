@@ -35,6 +35,14 @@ python manage.py runserver 0.0.0.0:8000
 
 > NB : the server can't be deployed in production right away. Some security precautions are to be taken. Use these instruction only for testing purposes.
 
+## Database
+
+We have implemented the database using the default `sqlite3` server.
+
+The current state of the tables is shown in the image below. The `User` table is different as we didn't implement it ourself. It is managed by default by Django. All other tables are defined in `/back/BDD/models.py`.
+
+![Database architecture](images/database.png)
+
 ## Comments
 
 Timezones are not yet well managed. We need to make sure each alarm rings at the right time in the right timezone.
