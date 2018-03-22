@@ -16,24 +16,25 @@ The "inc56" project is a complete infrastructure including :
 * *A mobile device* with an application to manage the client account / the connected object
 * *A server infrastructure* to hold data and manage the interactions between the mobile device and the connected object
 
-This project takes part of a first year course at the engineer school CentraleSupélec
+This project takes part of a first year course at the engineer school CentraleSupélec.
 
 ## What is in this repository
 
 Here is the code for the server infrastructure. It is built using the python framework [Django](https://www.djangoproject.com/).
-It is still under construction and largely incomplete
+
+> It is still under construction and largely incomplete.
 
 ## Requirements
 
 This project uses python `3.6` and Django `2.0`
-The python package `lxml` is also required
+The python package `lxml` is also required (see [here](http://lxml.de/)).
 
 ## Folder structure
 
 ```
 back/
 	README.md			-> This file
-	api/			    -> Folder for the `api` application
+	api/				-> Folder for the `api` application
 		urls.py			-> Url redirections for the API
 		views.py		-> Request processing and response
 	back/				-> Main folder of the project

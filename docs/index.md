@@ -3,12 +3,15 @@
 ## Table of contents
 
 * [Setup Django for developpement testing](#setup-django-for-developpement-testing)
+* [Comments](#comments)
 
 ## Setup Django for developpement testing
 
-First make sure to install properly `python 3.6.4` and `Django 2.0`. The procedure varies depending on your operating system.<br>Be sure to also install `lxml 4.1.1` for python. The easiest way is to install `pip` and run `pip install lxml==4.1.1`
+First make sure to install properly `python 3.6.4` and `Django 2.0`. The procedure varies depending on your operating system.<br>Be sure to also install `lxml 4.1.1` for python. The easiest way is to install `pip` and run `pip install lxml==4.1.1`.
 
-Go to the project root directory
+Clone/pull/download the repo.
+
+Go to the project root directory.
 
 Synchronize the databases
 
@@ -28,9 +31,9 @@ Run the server
 python manage.py runserver 0.0.0.0:8000
 ```
 
-> NB : on linux systems, use `python3/pip3` instead of `python/pip`
+> NB : on linux systems, use `python3/pip3` instead of `python/pip`.
 
-> The server can't be deployed in production right away. Some security precautions are to be taken.
+> NB : the server can't be deployed in production right away. Some security precautions are to be taken. Use these instruction only for testing purposes.
 
 ## Comments
 
