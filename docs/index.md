@@ -96,7 +96,7 @@ All values are treated as strings and no quotation marks are needed
 
   ```xml
   <?xml version="1.0"?>
-  <ensemble>
+  <set>
       <alarm>
           <alarm_id>1</alarm_id>
           <beamy_id>1</beamy_id>
@@ -110,7 +110,7 @@ All values are treated as strings and no quotation marks are needed
       <alarm>
       ...
       </alarm>
-  </ensemble>
+  </set>
   ```
 
 * **Error response :**
@@ -128,16 +128,19 @@ All values are treated as strings and no quotation marks are needed
   When a valid `id` parameter is used, the response xml contain only the alarm which internal id is `id`:
 
   ```xml
-  <alarm>
-  	<alarm_id>id</alarm_id>
-  	<beamy_id>1</beamy_id>
-  	<time>
-  		<day>lundi, mardi</day>
-  		<hour>8</hour>
-  		<minute>3</minute>
-  	</time>
-  	<state>set</state>
-  </alarm>
+  <?xml version="1.0"?>
+  <set>
+  	<alarm>
+          <alarm_id>id</alarm_id>
+          <beamy_id>1</beamy_id>
+          <time>
+              <day>lundi, mardi</day>
+              <hour>8</hour>
+              <minute>3</minute>
+          </time>
+          <state>set</state>
+      </alarm>
+  </set>
   ```
 
 
@@ -173,7 +176,21 @@ All values are treated as strings and no quotation marks are needed
 
   Code : 200
 
-  Content :  "coucou"
+  Content :  `text/html`
+  
+  ```xml
+  <?xml version="1.0" ?> 
+  <alarm>
+  	<alarm_id>9</alarm_id>
+  	<beamy_id>2</beamy_id>
+  	<time>
+  		<day>mercredi</day>
+  		<hour>9</hour>
+  		<minute>56</minute>
+  	</time>
+  	<state>set</state>
+  </alarm>
+  ```
 
 - **Error response :**
 
@@ -185,9 +202,6 @@ All values are treated as strings and no quotation marks are needed
   curl -X POST -d @new_alarm.xml http://localhost:8000/api/alarm/
   ```
 
-- **Notes**
-
-  In the future, the response from the server if all went well should include the new alarm id in the database
 
 #### Delete alarm
 

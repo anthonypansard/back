@@ -3,10 +3,10 @@
 ## Table of contents
 
 * [What is inc56](#what-is-inc56)
-* [What is in this repository ?](#what-is-in-this-repository)
+* [What is in this repository](#what-is-in-this-repository)
 * [Requirements](#requirements)
 * [Folder structure](#folder-structure)
-* [How to use ?](#how-to-use)
+* [How to use](#how-to-use)
 
 ## What is inc56
 
