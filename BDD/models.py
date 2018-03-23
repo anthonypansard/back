@@ -31,7 +31,6 @@ class Beamy(models.Model):
 
 class File(models.Model):
 	link 	= models.CharField(max_length = 42)
-	id_user = models.ForeignKey(User, on_delete = models.CASCADE)
 
 class Setting(models.Model):
 	link = models.CharField(max_length = 42)
