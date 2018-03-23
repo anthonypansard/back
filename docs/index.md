@@ -62,7 +62,7 @@ All `xml` files with alarm data embedded have the same basis structure :
 	<alarm_id>alarm id</alarm_id>
 	<beamy_id>beamy id</beamy_id>
 	<time>
-		<day>any subset of {lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche}</day>
+		<day>any subset of {monday, tuesday, wednesday, thursday, friday, saturday, sunday}</day>
 		<hour>hour between 0 and 23</hour>
 		<minute>minute between 0 and 59</minute>
 	</time>
@@ -115,7 +115,9 @@ All values are treated as strings and no quotation marks are needed
 
 * **Error response :**
 
-  <_Not yet implemented_>
+  Code : 404
+
+  Returned if `id` does not correspond to any internal alarm id
 
 * **Sample Call :**
 
@@ -226,7 +228,9 @@ All values are treated as strings and no quotation marks are needed
 
 - **Error response :**
 
-  <_Not yet implemented_>
+  Code : 404
+
+  Returned if `id` does not correspond to any internal alarm id
 
 - **Sample Call :**
 
