@@ -53,6 +53,8 @@ The current state of the tables is shown in the image below. The `User` table is
 
 The mobile device and the connected object transfert relevant data with the server using an API we designed.
 
+All wrong endpoints should return a `400` code.
+
 ### Alarm
 
 All `xml` files with alarm data embedded have the same basis structure :
@@ -90,7 +92,7 @@ All values are treated as strings and no quotation marks are needed
 
 * **Success reponse :**
 
-  Code : 200
+  Code : `200`
 
   Content : `text/xml`
 
@@ -115,7 +117,7 @@ All values are treated as strings and no quotation marks are needed
 
 * **Error response :**
 
-  Code : 404
+  Code : `404`
 
   Returned if `id` does not correspond to any internal alarm id
 
@@ -163,40 +165,42 @@ All values are treated as strings and no quotation marks are needed
   ```xml
   <?xml version="1.0" ?> 
   <alarm>
-  	<beamy_id>2</beamy_id>
-  	<time>
-  		<day>mercredi</day>
-  		<hour>9</hour>
-  		<minute>56</minute>
-  	</time>
-  	<state>set</state>
+      <beamy_id>2</beamy_id>
+      <time>
+          <day>mercredi</day>
+          <hour>9</hour>
+          <minute>56</minute>
+      </time>
+      <state>set</state>
   </alarm>
   ```
 
 
 - **Success reponse :**
 
-  Code : 200
+  Code : `200`
 
   Content :  `text/html`
   
   ```xml
   <?xml version="1.0" ?> 
   <alarm>
-  	<alarm_id>9</alarm_id>
-  	<beamy_id>2</beamy_id>
-  	<time>
-  		<day>mercredi</day>
-  		<hour>9</hour>
-  		<minute>56</minute>
-  	</time>
-  	<state>set</state>
+      <alarm_id>9</alarm_id>
+      <beamy_id>2</beamy_id>
+      <time>
+          <day>mercredi</day>
+          <hour>9</hour>
+          <minute>56</minute>
+      </time>
+      <state>set</state>
   </alarm>
   ```
 
 - **Error response :**
 
-  <_Not yet implemented_>
+  Code : `422`
+
+  Returned if the `xml` data is invalid. See the required structure [here](#alarm).
 
 - **Sample Call :**
 
@@ -222,13 +226,13 @@ All values are treated as strings and no quotation marks are needed
 
 - **Success reponse :**
 
-  Code : 200
+  Code : `200`
 
   Content :  "hello"
 
 - **Error response :**
 
-  Code : 404
+  Code : `404`
 
   Returned if `id` does not correspond to any internal alarm id
 
