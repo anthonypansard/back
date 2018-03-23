@@ -53,7 +53,6 @@ def detail (request, alarm_id):
 	except Alarm.DoesNotExist:
 		raise Http404("Alarm does not exist")
 
-
 @csrf_exempt
 def alarm(request):
 	if request.method == 'GET':
@@ -97,3 +96,28 @@ def alarm(request):
 	else:
 		return HttpResponse(status = 400)
 
+@csrf_exempt
+def toggleAlarm(request, alarm_id, toggle):
+	if request.method == 'GET':
+		try:
+			alarm = Alarm.objects.get(pk=alarm_id)
+
+			if toggle == 'start':
+				alarm.running = 'true'
+			
+			elif toggle == 'stop':
+				alarm.running = 'false'
+			
+			else:
+				return HttpResponse(status = 400)
+
+			alarm.save()
+		
+		except Alarm.DoesNotExist:
+			raise Http404("Alarm does not exist")
+		
+		content = buildAlarmResponse([alarm])
+		return HttpResponse(content, content_type='text/xml')
+	
+	else:
+		return HttpResponse(status = 400)
