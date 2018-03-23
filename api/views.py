@@ -7,6 +7,30 @@ from io import StringIO
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
+def buildAlarmResponse(alarmList):
+	content = "<?xml version=\"1.0\"?>\n"
+
+	root = etree.Element("set")
+	for alarm in alarmList:
+		beamy = alarm.id_beamy
+
+		alarm_ 	 = etree.SubElement(root, "alarm")
+		alarm_id = etree.SubElement(alarm_, "alarm_id")
+		beamy_id = etree.SubElement(alarm_, "beamy_id")
+		time 	 = etree.SubElement(alarm_, "time")
+		day		 = etree.SubElement(time, "day")
+		hour 	 = etree.SubElement(time, "hour")
+		minute 	 = etree.SubElement(time, "minute")
+		state 	 = etree.SubElement(alarm_, "state")
+		alarm_id.text = str(alarm.id)
+		beamy_id.text = str(beamy.id)
+		day.text 	  = str(alarm.day)
+		hour.text	  = str(alarm.hour)
+		minute.text   = str(alarm.minute)
+		state.text	  = str(alarm.state)
+	
+	content += etree.tostring(root, pretty_print=True).decode()
+	return content
 
 @csrf_exempt
 def detail (request, alarm_id):
@@ -14,28 +38,8 @@ def detail (request, alarm_id):
 		alarm = Alarm.objects.get(pk=alarm_id)
 
 		if request.method == 'GET':
-			text = "<?xml version=\"1.0\"?>\n"
-
-			beamy = alarm.id_beamy
-
-			alarm_ 	 = etree.Element("alarm")
-			alarm_id = etree.SubElement(alarm_, "alarm_id")
-			beamy_id = etree.SubElement(alarm_, "beamy_id")
-			time 	 = etree.SubElement(alarm_, "time")
-			day		 = etree.SubElement(time, "day")
-			hour 	 = etree.SubElement(time, "hour")
-			minute 	 = etree.SubElement(time, "minute")
-			state 	 = etree.SubElement(alarm_, "state")
-			alarm_id.text = str(alarm.id)
-			beamy_id.text = str(beamy.id)
-			day.text 	  = str(alarm.day)
-			hour.text	  = str(alarm.hour)
-			minute.text   = str(alarm.minute)
-			state.text	  = str(alarm.state)
-		
-			text += etree.tostring(alarm_, pretty_print=True).decode()
-
-			return HttpResponse(text, content_type='text/xml')
+			content = buildAlarmResponse([alarm])
+			return HttpResponse(content, content_type='text/xml')
 		
 		elif request.method == 'DELETE':
 			alarm.delete()
@@ -47,36 +51,13 @@ def detail (request, alarm_id):
 
 @csrf_exempt
 def alarm(request):
-
 	if request.method == 'GET':
-		text = "<?xml version=\"1.0\"?>\n"
-
-		root 	= etree.Element("ensemble")
-		for alarm in Alarm.objects.order_by('id'):
-			beamy = alarm.id_beamy
-
-			alarm_ 	 = etree.SubElement(root, "alarm")
-			alarm_id = etree.SubElement(alarm_, "alarm_id")
-			beamy_id = etree.SubElement(alarm_, "beamy_id")
-			time 	 = etree.SubElement(alarm_, "time")
-			day		 = etree.SubElement(time, "day")
-			hour 	 = etree.SubElement(time, "hour")
-			minute 	 = etree.SubElement(time, "minute")
-			state 	 = etree.SubElement(alarm_, "state")
-			alarm_id.text = str(alarm.id)
-			beamy_id.text = str(beamy.id)
-			day.text 	  = str(alarm.day)
-			hour.text	  = str(alarm.hour)
-			minute.text   = str(alarm.minute)
-			state.text	  = str(alarm.state)
-		
-		text += etree.tostring(root, pretty_print=True).decode()
-
-		return HttpResponse(text, content_type='text/xml')
+		content = buildAlarmResponse(Alarm.objects.order_by('id'))
+		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':
 		req = request.read().decode("utf-8")
-		print(req)
+		# print(req)
 		tree = etree.parse(StringIO(req))
 		# TODO : think about when multiple alarms are present in the POST request
 		day   	 = tree.xpath("/alarm/time/day")[0].text
@@ -94,6 +75,6 @@ def alarm(request):
 					  id_beamy = beamy)
 		
 		alarm.save()
-
-		return HttpResponse("coucou")
+		content = buildAlarmResponse([alarm])
+		return HttpResponse(content, content_type='text/xml')
 
