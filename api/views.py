@@ -44,6 +44,9 @@ def detail (request, alarm_id):
 		elif request.method == 'DELETE':
 			alarm.delete()
 			return HttpResponse("hello")
+		
+		else:
+			return HttpResponse(status = 400)
 
 	except Alarm.DoesNotExist:
 		raise Http404("Alarm does not exist")
@@ -60,13 +63,21 @@ def alarm(request):
 		# print(req)
 		tree = etree.parse(StringIO(req))
 		# TODO : think about when multiple alarms are present in the POST request
-		day   	 = tree.xpath("/alarm/time/day")[0].text
+		day   	 = tree.xpath("/alarm/time/day")[0].text.replace(" ", "")
 		hour 	 = int(tree.xpath("/alarm/time/hour")[0].text)
 		minute 	 = int(tree.xpath("/alarm/time/minute")[0].text)
 		state	 = tree.xpath("/alarm/state")[0].text
 		beamy_id = int(tree.xpath("/alarm/beamy_id")[0].text)
 		
-		beamy = Beamy.objects.get(pk = beamy_id)
+		try:
+			assert set(day.split(",")).issubset(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"])
+			assert hour >= 0 and hour <= 23
+			assert minute >=0 and minute <=59
+			assert state in ["set", "unset"]
+			beamy = Beamy.objects.get(pk = beamy_id)
+			
+		except:
+			return HttpResponse(status = 422)
 
 		alarm = Alarm(day = day,
 					  hour = hour,
@@ -77,4 +88,7 @@ def alarm(request):
 		alarm.save()
 		content = buildAlarmResponse([alarm])
 		return HttpResponse(content, content_type='text/xml')
+	
+	else:
+		return HttpResponse(status = 400)
 
