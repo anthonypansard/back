@@ -21,13 +21,15 @@ def buildAlarmResponse(alarmList):
 		day		 = etree.SubElement(time, "day")
 		hour 	 = etree.SubElement(time, "hour")
 		minute 	 = etree.SubElement(time, "minute")
-		state 	 = etree.SubElement(alarm_, "state")
+		enabled	 = etree.SubElement(alarm_, "enabled")
+		running	 = etree.SubElement(alarm_, "running")
 		alarm_id.text = str(alarm.id)
 		beamy_id.text = str(beamy.id)
 		day.text 	  = str(alarm.day)
 		hour.text	  = str(alarm.hour)
 		minute.text   = str(alarm.minute)
-		state.text	  = str(alarm.state)
+		enabled.text  = str(alarm.enabled)
+		running.text  = str(alarm.running)
 	
 	content += etree.tostring(root, pretty_print=True).decode()
 	return content
@@ -59,33 +61,36 @@ def alarm(request):
 		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':
-		req = request.read().decode("utf-8")
-		# print(req)
-		tree = etree.parse(StringIO(req))
-		# TODO : think about when multiple alarms are present in the POST request
-		day   	 = tree.xpath("/alarm/time/day")[0].text.replace(" ", "")
-		hour 	 = int(tree.xpath("/alarm/time/hour")[0].text)
-		minute 	 = int(tree.xpath("/alarm/time/minute")[0].text)
-		state	 = tree.xpath("/alarm/state")[0].text
-		beamy_id = int(tree.xpath("/alarm/beamy_id")[0].text)
+		try :
+			req = request.read().decode("utf-8")
+			# print(req)
+			tree = etree.parse(StringIO(req))
+			# TODO : think about when multiple alarms are present in the POST request
+			day   	 = tree.xpath("/alarm/time/day")[0].text
+			hour 	 = int(tree.xpath("/alarm/time/hour")[0].text)
+			minute 	 = int(tree.xpath("/alarm/time/minute")[0].text)
+			enabled	 = tree.xpath("/alarm/enabled")[0].text
+			beamy_id = int(tree.xpath("/alarm/beamy_id")[0].text)
 		
-		try:
-			assert set(day.split(",")).issubset(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"])
-			assert hour >= 0 and hour <= 23
-			assert minute >=0 and minute <=59
-			assert state in ["set", "unset"]
 			beamy = Beamy.objects.get(pk = beamy_id)
 			
-		except:
-			return HttpResponse(status = 422)
-
-		alarm = Alarm(day = day,
-					  hour = hour,
-					  minute = minute,
-					  state = state, 
-					  id_beamy = beamy)
+			alarm = Alarm(day = day,
+						  hour = hour,
+					      minute = minute,
+						  enabled = enabled, 
+						  id_beamy = beamy)
 		
-		alarm.save()
+			alarm.save()
+		
+		except Beamy.DoesNotExist:
+			return HttpResponse('Bad data : "beamy_id" is not valid', status = 422)
+
+		except IndexError:
+			return HttpResponse('Bad data : the xml file sent is missing a required field', status = 422)
+
+		except Exception as e:
+			return HttpResponse(str(e), status = 422)
+		
 		content = buildAlarmResponse([alarm])
 		return HttpResponse(content, content_type='text/xml')
 	

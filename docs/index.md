@@ -61,14 +61,26 @@ All `xml` files with alarm data embedded have the same basis structure :
 
 ```xml
 <alarm>
-	<alarm_id>alarm id</alarm_id>
-	<beamy_id>beamy id</beamy_id>
-	<time>
-		<day>any subset of {monday, tuesday, wednesday, thursday, friday, saturday, sunday}</day>
-		<hour>hour between 0 and 23</hour>
-		<minute>minute between 0 and 59</minute>
-	</time>
-	<state>an element of {set, unset, running}</state>
+    <alarm_id>alarm_id</alarm_id>
+    <!-- Only present in responses from the server -->
+    <beamy_id>beamy_id</beamy_id>
+    <!-- Should match an existing beamy id -->
+    <time>
+        <day>saturday, sunday</day>
+        <!--
+        Any subset of {monday, tuesday, wednesday, thursday, friday, saturday, sunday}
+        Should be delimited by commas ","
+        Spaces are truncated by the server
+        -->
+        <hour>10</hour>
+        <!-- Should be an int in the range [0, 23] -->
+        <minute>15</minute>
+        <!-- Should be an int in the range [0, 59] -->
+    </time>
+    <enabled>true</enabled>
+    <!-- Should be an element {true, false} -->
+    <running>false</running>
+    <!-- Only present in responses from the server -->
 </alarm>
 ```
 
@@ -103,11 +115,12 @@ All values are treated as strings and no quotation marks are needed
           <alarm_id>1</alarm_id>
           <beamy_id>1</beamy_id>
           <time>
-              <day>lundi, mardi</day>
+              <day>monday, tuesday</day>
               <hour>8</hour>
               <minute>3</minute>
           </time>
-          <state>set</state>
+          <enabled>true</enabled>
+          <running>false</running>
       </alarm>
       <alarm>
       ...
@@ -138,11 +151,12 @@ All values are treated as strings and no quotation marks are needed
           <alarm_id>id</alarm_id>
           <beamy_id>1</beamy_id>
           <time>
-              <day>lundi, mardi</day>
+              <day>monday, tuesday</day>
               <hour>8</hour>
               <minute>3</minute>
           </time>
-          <state>set</state>
+          <enabled>true</enabled>
+          <running>false</running>
       </alarm>
   </set>
   ```
@@ -167,11 +181,11 @@ All values are treated as strings and no quotation marks are needed
   <alarm>
       <beamy_id>2</beamy_id>
       <time>
-          <day>mercredi</day>
+          <day>wednesday</day>
           <hour>9</hour>
           <minute>56</minute>
       </time>
-      <state>set</state>
+      <enabled>true</enabled>
   </alarm>
   ```
 
@@ -188,11 +202,12 @@ All values are treated as strings and no quotation marks are needed
       <alarm_id>9</alarm_id>
       <beamy_id>2</beamy_id>
       <time>
-          <day>mercredi</day>
+          <day>wednesday</day>
           <hour>9</hour>
           <minute>56</minute>
       </time>
-      <state>set</state>
+      <enabled>true</enabled>
+      <running>false</running>
   </alarm>
   ```
 
@@ -202,11 +217,17 @@ All values are treated as strings and no quotation marks are needed
 
   Returned if the `xml` data is invalid. See the required structure [here](#alarm).
 
+  A message explaning the error comes along.
+
 - **Sample Call :**
 
   ```sh
   curl -X POST -d @new_alarm.xml http://localhost:8000/api/alarm/
   ```
+
+- **Note :**
+
+  `running` can not set or unset by this request. You need to use a specific request. See [Stop alarm](#stop-alarm) and [Start alarm](#start-alarm).
 
 
 #### Delete alarm
