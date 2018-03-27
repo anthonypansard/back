@@ -33,17 +33,24 @@ The python package `lxml` is also required (see [here](http://lxml.de/)).
 
 ```
 back/
-	README.md			-> This file
-	api/				-> Folder for the `api` application
-		urls.py			-> Url redirections for the API
-		views.py		-> Request processing and response
-	back/				-> Main folder of the project
-		settings.py		-> Settings for Django
-		urls.py			-> Urls base for the applications
-	BDD/				-> Folder for the `BDD` application
-		admin.py		-> Customization for the default admin interface
-		models.py		-> Database models
-	docs/				-> Documentation
+	README.md				-> This file
+	alarm/					-> Application handling the alarms
+		admin.py			-> Customization for the default admin interface
+		models.py			-> Models for the alarm application
+		urls.py				-> Url redirections for the alarm API
+		views.py			-> Request processing and response
+	back/					-> Main folder of the project
+		settings/			-> Django settings
+			__init__.py		-> Modify this file to change the settings overide file
+			base.py			-> Main setting file
+			development.py	-> Settings overide for development environement
+			testserver.py	-> Settings overide for the test server (not gited)
+		db.sqlite3			-> Database file (not gited)
+		urls.py				-> Urls redirection for the applications
+	BDD/					-> Application hosting the main database
+		admin.py			-> Customization for the default admin interface
+		models.py			-> Main models
+	docs/					-> Documentation
 		index.md
 ```
 

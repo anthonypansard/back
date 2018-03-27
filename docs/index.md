@@ -4,8 +4,8 @@
 
 * [Setup Django for developpement testing](#setup-django-for-developpement-testing)
 * [Database](#database)
-* [Endpoints](#endpoints)
-  * [Alarm](#alarm)
+* [Alarm](#alarm)
+  * [Endpoints](#endpoints)
     * [Retrieve alarm list](#retrieve-alarm-list)
     * [Add alarm](#add-alarm)
     * [Delete alarm](#delete-alarm)
@@ -13,7 +13,7 @@
 
 ## Setup Django for developpement testing
 
-First make sure to install properly `python 3.6.4` and `Django 2.0`. The procedure varies depending on your operating system.<br>Be sure to also install `lxml 4.1.1` for python. The easiest way is to install `pip` and run `pip install lxml==4.1.1`.
+First make sure to install properly `python 3.6.4` and `Django 2.0`. The procedure varies depending on your operating system.<br>You also need to install `pip` and run `pip install-r requirements.txt`.
 
 Clone/pull/download the repo.
 
@@ -49,13 +49,9 @@ The current state of the tables is shown in the image below. The `User` table is
 
 ![Database architecture](images/database.png)
 
-## Endpoints
+## Alarm
 
-The mobile device and the connected object transfert relevant data with the server using an API we designed.
-
-All wrong endpoints should return a `400` code.
-
-### Alarm
+Alarm data is exchanged with the mobile device and the connected object using an API we designed.
 
 All `xml` files with alarm data embedded have the same basis structure :
 
@@ -85,6 +81,10 @@ All `xml` files with alarm data embedded have the same basis structure :
 ```
 
 All values are treated as strings and no quotation marks are needed
+
+### Endpoints
+
+All wrong endpoints should return a `400` code.
 
 #### Retrieve alarm list
 
