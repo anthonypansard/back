@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Device, Beamy, File, Setting, BeamyUser, DeviceUser, FileUser, Alarm
+from .models import Device, Beamy, File, Setting, BeamyUser, DeviceUser, FileUser
 
 # Register your models here.
 
@@ -29,12 +29,6 @@ class DeviceUserAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     search_fields   = ('id_device', 'id_user',)
 
-class AlarmAdmin(admin.ModelAdmin):
-    list_display    = ('id_beamy', 'enabled', 'running',)
-    list_filter     = ('id_beamy__id', 'enabled',)
-    readonly_fields = ('id',)
-    search_fields   = ('due_date', 'enabled', 'id_beamy__name')
-
 
 admin.site.register(Device, DeviceAdmin)
 admin.site.register(Beamy, BeamyAdmin)
@@ -42,5 +36,3 @@ admin.site.register(File)
 admin.site.register(Setting)
 admin.site.register(BeamyUser, BeamyUserAdmin)
 admin.site.register(DeviceUser, DeviceUserAdmin)
-admin.site.register(FileUser)
-admin.site.register(Alarm, AlarmAdmin)

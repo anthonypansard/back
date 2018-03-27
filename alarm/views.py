@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpRequest
-from BDD.models import Alarm, Beamy
+from BDD.models import Beamy
+from .models import Alarm
 
 from lxml import etree
 from io import StringIO
@@ -35,7 +36,7 @@ def buildAlarmResponse(alarmList):
 	return content
 
 @csrf_exempt
-def detail (request, alarm_id):
+def detail(request, alarm_id):
 	try:
 		alarm = Alarm.objects.get(pk=alarm_id)
 
@@ -56,7 +57,10 @@ def detail (request, alarm_id):
 @csrf_exempt
 def alarm(request):
 	if request.method == 'GET':
-		content = buildAlarmResponse(Alarm.objects.order_by('id'))
+		alarmList = Alarm.objects.order_by('id')
+		if not alarmList:
+			return HttpResponse("Empty list", status = 500)
+		content = buildAlarmResponse(alarmList)
 		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':

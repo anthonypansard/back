@@ -5,3 +5,5 @@ db.sqlite3
 .DS_Store
 .profile
 l.sh
+back/settings/__init__testserver.py
+testserver.py

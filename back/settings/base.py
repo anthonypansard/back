@@ -26,7 +26,7 @@ SECRET_KEY = '+t$a=oe_sg98mqb=fotbmtdknd14^i84n+2hdcl!(lbc$e0764'
 DEBUG = True
 
 # Needed to allow connection from the exterior with a domain name and also from localhost
-ALLOWED_HOSTS = ['inc56.cs-campus.fr', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'BDD',
-    'api'
+    'alarm'
 ]
 
 MIDDLEWARE = [

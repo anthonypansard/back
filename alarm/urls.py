@@ -18,7 +18,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('alarm/<int:alarm_id>/', views.detail, name = 'detail'),
-    path('alarm/', views.alarm, name = 'alarm'),
-    path('alarm/<int:alarm_id>/<toggle>/', views.toggleAlarm, name = 'toggleAlarm'),
+    path('<int:alarm_id>/', views.detail, name = 'detail'),
+    path('', views.alarm, name = 'alarm'),
+    path('<int:alarm_id>/<toggle>/', views.toggleAlarm, name = 'toggleAlarm'),
 ]
