@@ -43,8 +43,8 @@ back/
 		settings/			-> Django settings
 			__init__.py		-> Modify this file to change the settings overide file
 			base.py			-> Main setting file
-			development.py	-> Settings overide for development environement
-			testserver.py	-> Settings overide for the test server (not gited)
+			development.py		-> Settings overide for development environement
+			testserver.py		-> Settings overide for the test server (not gited)
 		db.sqlite3			-> Database file (not gited)
 		urls.py				-> Urls redirection for the applications
 	BDD/					-> Application hosting the main database
