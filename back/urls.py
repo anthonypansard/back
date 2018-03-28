@@ -24,4 +24,6 @@ urlpatterns = [
     path('api/alarm/', include('alarm.urls')),
 ]
 
+# Be careful when deployding to production
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
