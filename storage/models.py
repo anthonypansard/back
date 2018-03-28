@@ -8,6 +8,9 @@ from datetime import datetime
 
 # Create your models here.
 
+def now():
+	return datetime.now()
+
 class FileUser(models.Model):
 	right 	 = models.CharField(max_length = 42)
 	id_user  = models.ForeignKey(User, on_delete = models.CASCADE)
@@ -23,7 +26,7 @@ class FileImage(models.Model):
 	name = models.CharField(max_length = 42)
 	filesize = models.PositiveIntegerField(default=0)
 	resolution = models.PositiveIntegerField(default=0)
-	date = models.DateTimeField(default=datetime.now())
+	date = models.DateTimeField(default=now)
 	GPS = models.CharField(max_length = 42, blank=True)
 	form = models.CharField(max_length = 42, blank=True)
 	image = models.ImageField(upload_to="images/")
@@ -36,7 +39,7 @@ class FileSong(models.Model):
 	name = models.CharField(max_length = 42)
 	filesize = models.IntegerField(default = 0)
 	resolution = models.IntegerField(default = 0)
-	date = models.DateTimeField(default = datetime.now())
+	date = models.DateTimeField(default =now)
 	form = models.CharField(max_length = 42, blank=True)
 	length = models.DurationField(default=0)
 	song = models.FileField(upload_to="songs/")
@@ -59,7 +62,7 @@ class FileVideo(models.Model):
 	name = models.CharField(max_length = 42)
 	filesize = models.PositiveIntegerField(default=0)
 	resolution = models.PositiveIntegerField(default=0)
-	date = models.DateTimeField(default=datetime.now())
+	date = models.DateTimeField(default=now)
 	form = models.CharField(max_length = 42, blank=True)
 	length = models.DurationField(default=0)
 	album = models.CharField(max_length=42, blank=True)
