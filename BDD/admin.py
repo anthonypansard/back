@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Device, Beamy, File, Setting, BeamyUser, DeviceUser, FileUser
+from .models import Device, Beamy, Setting, BeamyUser, DeviceUser
 
 # Register your models here.
 
@@ -32,7 +32,6 @@ class DeviceUserAdmin(admin.ModelAdmin):
 
 admin.site.register(Device, DeviceAdmin)
 admin.site.register(Beamy, BeamyAdmin)
-admin.site.register(File)
 admin.site.register(Setting)
 admin.site.register(BeamyUser, BeamyUserAdmin)
 admin.site.register(DeviceUser, DeviceUserAdmin)

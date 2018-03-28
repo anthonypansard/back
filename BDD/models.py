@@ -24,11 +24,6 @@ class Beamy(models.Model):
 	def __str__(self):
 		return self.name
 
-class File(models.Model):
-	link 	= models.CharField(max_length = 42)
-
-	class Meta:
-		db_table = 'bdd_file'
 
 class Setting(models.Model):
 	link = models.CharField(max_length = 42)
@@ -50,11 +45,3 @@ class DeviceUser(models.Model):
 
 	class Meta:
 		db_table = 'bdd_deviceuser'
-
-class FileUser(models.Model):
-	right 	 = models.CharField(max_length = 42)
-	id_file  = models.ForeignKey('File', on_delete = models.CASCADE)
-	id_user  = models.ForeignKey(User, on_delete = models.CASCADE)
-	
-	class Meta:
-		db_table = 'bdd_fileuser'

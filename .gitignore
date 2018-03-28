@@ -7,3 +7,4 @@ db.sqlite3
 l.sh
 back/settings/__init__testserver.py
 testserver.py
+media/
