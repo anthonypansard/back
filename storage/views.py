@@ -1,19 +1,22 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpRequest
 from .models import FileImage, FileSong, FileVideo
+from datetime import datetime
+from lxml import etree
+from io import StringIO
 
 # Create your views here.
 
-def buildFileResponse(fileList, type):
+def buildFileResponse(fileList, file_type):
 	content = "<?xml version=\"1.0\"?>\n"
 
 	root = etree.Element("set")
 
-	if type = "image" :
+	if file_type == "image" :
 		for file in fileList:
 			file_ 	 	= etree.SubElement(root, "image")
 			file_id	 	= etree.SubElement(file_, "file_id")
-			image 		= etree.SubElement(file_, "lien")
+			link 		= etree.SubElement(file_, "link")
 			name 	 	= etree.SubElement(file_, "name")
 			filesize 	= etree.SubElement(file_, "filesize")
 			resolution	= etree.SubElement(file_, "resolution")
@@ -27,24 +30,24 @@ def buildFileResponse(fileList, type):
 			gps			= etree.SubElement(file_, "gps")
 			form 		= etree.SubElement(file_, "format")
 			file_id.text 	= str(file.id)
-			lien.text		= str(file.image)
+			link.text		= str(file.image.url)
 			name.text 	  	= str(file.name)
 			filesize.text	= str(file.filesize)
 			resolution.text	= str(file.resolution)
-			year.text		= str(file.date.year())
-			month.text		= str(file.date.month())
-			day.text		= str(file.date.day())
-			hour.text		= str(file.date.hour())
-			minute.text		= str(file.date.minute())
-			second.text		= str(file.date.second())
+			year.text		= str(file.date.year)
+			month.text		= str(file.date.month)
+			day.text		= str(file.date.day)
+			hour.text		= str(file.date.hour)
+			minute.text		= str(file.date.minute)
+			second.text		= str(file.date.second)
 			gps.text		= str(file.GPS)
 			form.text 		= str(file.form)
 
-	elif type = "video" :
+	elif file_type == "video" :
 		for file in fileList:
 			file_ 	 	= etree.SubElement(root, "video")
 			file_id	 	= etree.SubElement(file_, "file_id")
-			lien 		= etree.SubElement(file_, "video")
+			link 		= etree.SubElement(file_, "link")
 			name 	 	= etree.SubElement(file_, "name")
 			filesize 	= etree.SubElement(file_, "filesize")
 			resolution	= etree.SubElement(file_, "resolution")
@@ -58,24 +61,24 @@ def buildFileResponse(fileList, type):
 			form 		= etree.SubElement(file_, "format")
 			length		= etree.SubElement(file_, "length")
 			file_id.text 	= str(file.id)
-			lien.text		= str(file.video)
+			link.text		= str(file.video.url)
 			name.text 	  	= str(file.name)
 			filesize.text	= str(file.filesize)
 			resolution.text	= str(file.resolution)
-			year.text		= str(file.date.year())
-			month.text		= str(file.date.month())
-			day.text		= str(file.date.day())
-			hour.text		= str(file.date.hour())
-			minute.text		= str(file.date.minute())
-			second.text		= str(file.date.second())
+			year.text		= str(file.date.year)
+			month.text		= str(file.date.month)
+			day.text		= str(file.date.day)
+			hour.text		= str(file.date.hour)
+			minute.text		= str(file.date.minute)
+			second.text		= str(file.date.second)
 			form.text 		= str(file.form)
 			length			= str(file.length)
 
-	elif type = "song" :
+	elif file_type == "song" :
 		for file in fileList:
 			file_ 	 	= etree.SubElement(root, "song")
 			file_id	 	= etree.SubElement(file_, "file_id")
-			lien 		= etree.SubElement(file_, "song")
+			link 		= etree.SubElement(file_, "link")
 			name 	 	= etree.SubElement(file_, "name")
 			filesize 	= etree.SubElement(file_, "filesize")
 			resolution	= etree.SubElement(file_, "resolution")
@@ -91,16 +94,16 @@ def buildFileResponse(fileList, type):
 			album 		= etree.SubElement(file_, "album")
 			artist		= etree.SubElement(file_, "artist")
 			file_id.text 	= str(file.id)
-			lien.text		= str(file.song)
+			link.text		= str(file.song.url)
 			name.text 	  	= str(file.name)
 			filesize.text	= str(file.filesize)
 			resolution.text	= str(file.resolution)
-			year.text		= str(file.date.year())
-			month.text		= str(file.date.month())
-			day.text		= str(file.date.day())
-			hour.text		= str(file.date.hour())
-			minute.text		= str(file.date.minute())
-			second.text		= str(file.date.second())
+			year.text		= str(file.date.year)
+			month.text		= str(file.date.month)
+			day.text		= str(file.date.day)
+			hour.text		= str(file.date.hour)
+			minute.text		= str(file.date.minute)
+			second.text		= str(file.date.second)
 			form.text 		= str(file.form)
 			length			= str(file.length)
 			album			= str(file.album)
@@ -109,12 +112,12 @@ def buildFileResponse(fileList, type):
 	content += etree.tostring(root, pretty_print=True).decode()
 	return content
 
-def fileImage(request, type):
+def fileImage(request):
 	if request.method == 'GET':
 		fileList = FileImage.objects.order_by('id')
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
-		content = buildFileResponse(fileList, type)
+		content = buildFileResponse(fileList, "image")
 		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':
@@ -141,16 +144,13 @@ def fileImage(request, type):
 							  name = name,
 						  	  filesize = filesize,
 					      	  resolution = resolution,
-						      date.year = year, 
-						      date.month = month,
-						      date.day = day,
-						      date.hour = hour,
-						      date.minute = minute,
-						      date.second = second,
+							  date = datetime(year=year, month=month, day=day, hour=hour, minute=minute, second=second),
 						      gps = gps,
 						      form = form)
 		
 			image.save()
-	
+		
+		except:
+			pass
 	else:
 		return HttpResponse(status = 400)
