@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from BDD.models import Beamy
 from django.core.exceptions import ValidationError
+from datetime import datetime
 
 # Create your models here.
 
@@ -20,6 +21,11 @@ class FileUser(models.Model):
 
 class FileImage(models.Model):
 	name = models.CharField(max_length = 42)
+	filesize = models.PositiveIntegerField(default=0)
+	resolution = models.PositiveIntegerField(default=0)
+	date = models.DateTimeField(default=datetime.now())
+	GPS = models.CharField(max_length = 42, blank=True)
+	form = models.CharField(max_length = 42, blank=True)
 	image = models.ImageField(upload_to="images/")
 
 	class Meta:
@@ -28,6 +34,11 @@ class FileImage(models.Model):
 
 class FileSong(models.Model):
 	name = models.CharField(max_length = 42)
+	filesize = models.IntegerField(default = 0)
+	resolution = models.IntegerField(default = 0)
+	date = models.DateTimeField(default = datetime.now())
+	form = models.CharField(max_length = 42, blank=True)
+	length = models.DurationField(default=0)
 	song = models.FileField(upload_to="songs/")
 
 	def clean(self):
@@ -46,6 +57,13 @@ class FileSong(models.Model):
 
 class FileVideo(models.Model):
 	name = models.CharField(max_length = 42)
+	filesize = models.PositiveIntegerField(default=0)
+	resolution = models.PositiveIntegerField(default=0)
+	date = models.DateTimeField(default=datetime.now())
+	form = models.CharField(max_length = 42, blank=True)
+	length = models.DurationField(default=0)
+	album = models.CharField(max_length=42, blank=True)
+	artist = models.CharField(max_length=42, blank=True)
 	video = models.FileField(upload_to="videos/")
 
 	def clean(self):
