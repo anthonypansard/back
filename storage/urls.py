@@ -19,4 +19,9 @@ from . import views
 
 urlpatterns = [
     path('image/', views.fileImage, name = 'fileImage'),
+    path('video/', views.fileImage, name = 'fileVideo'),
+    path('song/', views.fileImage, name = 'fileSong'),
+    path('image/<int:alarm_id>/', views.detailImage, name = 'detailImage'),
+    path('video/<int:alarm_id>/', views.detailVideo, name = 'detailVideo'),
+    path('song/<int:alarm_id>/', views.detailSong, name = 'detailSong'),
 ]

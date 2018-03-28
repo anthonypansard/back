@@ -154,3 +154,150 @@ def fileImage(request):
 			pass
 	else:
 		return HttpResponse(status = 400)
+
+def fileVideo(request):
+	if request.method == 'GET':
+		fileList = FileVideo.objects.order_by('id')
+		if not fileList :
+			return HttpResponse("Empty list", status = 500)
+		content = buildFileResponse(fileList, "video")
+		return HttpResponse(content, content_type='text/xml')
+
+	elif request.method == 'POST':
+		try :
+			req = request.read().decode("utf-8")
+			# print(req)
+			tree = etree.parse(StringIO(req))
+			# TODO : think about when multiple alarms are present in the POST request
+			lien = tree.path("video/lien")
+			name   	 = tree.xpath("/video/name")[0].text
+			filesize   	 = int(tree.xpath("/video/filesize")[0].text)
+			resolution   	 = int(tree.xpath("/video/resolution")[0].text)
+			year   	 = int(tree.xpath("/video/date/year")[0].text)
+			month   	 = tree.xpath("/video/date/month")[0].text
+			day   	 = int(tree.xpath("/video/date/day")[0].text)
+			hour   	 = int(tree.xpath("/video/date/hour")[0].text)
+			minute   	 = int(tree.xpath("/video/date/minute")[0].text)
+			second   	 = int(tree.xpath("/video/date/second")[0].text)
+			form   	 = tree.xpath("/video/format")[0].text
+			length	= int(tree.xpath("/video/length")[0].text)
+			
+		
+			video = FileVideo(video = lien,
+							  name = name,
+						  	  filesize = filesize,
+					      	  resolution = resolution,
+							  date = datetime(year=year, month=month, day=day, hour=hour, minute=minute, second=second),
+						      form = form,
+						      length = length)
+		
+			video.save()
+		
+		except:
+			pass
+	else:
+		return HttpResponse(status = 400)
+
+def fileSong(request):
+	if request.method == 'GET':
+		fileList = FileSong.objects.order_by('id')
+		if not fileList :
+			return HttpResponse("Empty list", status = 500)
+		content = buildFileResponse(fileList, "song")
+		return HttpResponse(content, content_type='text/xml')
+
+	elif request.method == 'POST':
+		try :
+			req = request.read().decode("utf-8")
+			# print(req)
+			tree = etree.parse(StringIO(req))
+			# TODO : think about when multiple alarms are present in the POST request
+			lien = tree.path("song/lien")
+			name   	 = tree.xpath("/song/name")[0].text
+			filesize   	 = int(tree.xpath("/song/filesize")[0].text)
+			resolution   	 = int(tree.xpath("/song/resolution")[0].text)
+			year   	 = int(tree.xpath("/song/date/year")[0].text)
+			month   	 = tree.xpath("/song/date/month")[0].text
+			day   	 = int(tree.xpath("/song/date/day")[0].text)
+			hour   	 = int(tree.xpath("/song/date/hour")[0].text)
+			minute   	 = int(tree.xpath("/song/date/minute")[0].text)
+			second   	 = int(tree.xpath("/song/date/second")[0].text)
+			form   	 = tree.xpath("/song/format")[0].text
+			length	= int(tree.xpath("/song/length")[0].text)
+			album	= tree.xpath("/song/album").text
+			artist = tree.xpath("/song/artist")
+			
+		
+			song = FileSong(  video = lien,
+							  name = name,
+						  	  filesize = filesize,
+					      	  resolution = resolution,
+							  date = datetime(year=year, month=month, day=day, hour=hour, minute=minute, second=second),
+						      form = form,
+						      length = length,
+						      album = album,
+						      artist = artist)
+		
+			song.save()
+		
+		except:
+			pass
+	else:
+		return HttpResponse(status = 400)
+
+@csrf_exempt
+def detailImage(request, image_id):
+	try:
+		image = FileImage.objects.get(pk=image_id)
+
+		if request.method == 'GET':
+			content = buildFileResponse([image, 'image'])
+			return HttpResponse(content, content_type='text/xml')
+		
+		elif request.method == 'DELETE':
+			image.delete()
+			return HttpResponse("hello")
+		
+		else:
+			return HttpResponse(status = 400)
+
+	except:
+		raise Http404("This image does not exist")
+
+@csrf_exempt
+def detailVideo(request, video_id):
+	try:
+		video = FileVideo.objects.get(pk=video_id)
+
+		if request.method == 'GET':
+			content = buildFileResponse([video, 'video'])
+			return HttpResponse(content, content_type='text/xml')
+		
+		elif request.method == 'DELETE':
+			video.delete()
+			return HttpResponse("hello")
+		
+		else:
+			return HttpResponse(status = 400)
+
+	except:
+		raise Http404("This video does not exist")
+
+@csrf_exempt
+def detailVideo(request, song_id):
+	try:
+		song = FileSong.objects.get(pk=song_id)
+
+		if request.method == 'GET':
+			content = buildFileResponse([song, 'song'])
+			return HttpResponse(content, content_type='text/xml')
+		
+		elif request.method == 'DELETE':
+			song.delete()
+			return HttpResponse("hello")
+		
+		else:
+			return HttpResponse(status = 400)
+
+	except:
+		raise Http404("This song does not exist")
