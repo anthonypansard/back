@@ -4,6 +4,7 @@ from .models import FileImage, FileSong, FileVideo
 from datetime import datetime
 from lxml import etree
 from io import StringIO
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -284,7 +285,7 @@ def detailVideo(request, video_id):
 		raise Http404("This video does not exist")
 
 @csrf_exempt
-def detailVideo(request, song_id):
+def detailSong(request, song_id):
 	try:
 		song = FileSong.objects.get(pk=song_id)
 
