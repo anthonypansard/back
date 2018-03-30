@@ -11,6 +11,10 @@ import os
 
 # Create your models here.
 
+IMAGE_EXT = [".jpg", ".jpeg", ".png"]
+VIDEO_EXT = [".mp4", ".mkv", ".avi"]
+SONG_EXT  = [".mp3", ".flac", ".aac", ".m4a"]
+
 def now():
 	return datetime.now()
 
@@ -23,11 +27,11 @@ class FileUser(models.Model):
 
 	class Meta:
 		db_table = 'storage_fileuser'
-
+	
 
 class FileImage(models.Model):
 	def upload_path(self, filename):
-		return "images/{}-{}.{}".format(self.name, uuid.uuid4(), filename.split(".")[-1])
+		return "images/{}-{}.{}".format(self.name, uuid.uuid4(), os.path.splitext(filename)[1])
 
 	name = models.CharField(max_length = 42)
 	filesize = models.PositiveIntegerField(default=0)
@@ -37,13 +41,26 @@ class FileImage(models.Model):
 	form = models.CharField(max_length = 42, blank=True)
 	image = models.ImageField(upload_to=upload_path)
 
+	def clean(self):
+		ext = os.path.splitext(self.image.name)[1].lower()
+		if not ext in IMAGE_EXT:
+			raise ValidationError("Bad data : this format is not accepted")
+		self.form = ext.replace(".", "")
+		
+	def save(self, **kwargs):
+		self.clean()
+		return super(FileImage, self).save(**kwargs)
+
+	def __str__(self):
+		return self.name
+
 	class Meta:
 		db_table = 'storage_fileimage'
 
 
 class FileSong(models.Model):
 	def upload_path(self, filename):
-		return "song/{}-{}.{}".format(self.name, uuid.uuid4(), filename.split(".")[-1])
+		return "song/{}-{}.{}".format(self.name, uuid.uuid4(), os.path.splitext(filename)[1])
 
 	name = models.CharField(max_length = 42)
 	filesize = models.IntegerField(default = 0)
@@ -54,14 +71,17 @@ class FileSong(models.Model):
 	song = models.FileField(upload_to=upload_path)
 
 	def clean(self):
-		accepted_format = ['mp3', 'wma']
-		form = self.song.name.split(".")
-		if (form[-1] in accepted_format) == False :
+		ext = os.path.splitext(self.song.name)[1].lower()
+		if not ext in SONG_EXT:
 			raise ValidationError("Bad data : this format is not accepted")
+		self.form = ext.replace(".", "")
 		
 	def save(self, **kwargs):
 		self.clean()
 		return super(FileSong, self).save(**kwargs)
+
+	def __str__(self):
+		return self.name
 
 	class Meta:
 		db_table = 'storage_filesong'
@@ -69,7 +89,7 @@ class FileSong(models.Model):
 
 class FileVideo(models.Model):
 	def upload_path(self, filename):
-		return "video/{}-{}.{}".format(self.name, uuid.uuid4(), filename.split(".")[-1])
+		return "video/{}-{}{}".format(self.name, uuid.uuid4(), os.path.splitext(filename)[1])
 
 	name = models.CharField(max_length = 42)
 	filesize = models.PositiveIntegerField(default=0)
@@ -82,17 +102,21 @@ class FileVideo(models.Model):
 	video = models.FileField(upload_to=upload_path)
 
 	def clean(self):
-		accepted_format = ['mp4', 'avi', 'mkv']
-		form = self.video.name.split(".")
-		if (form[-1] in accepted_format) == False :
+		ext = os.path.splitext(self.video.name)[1].lower()
+		if not ext in VIDEO_EXT:
 			raise ValidationError("Bad data : this format is not accepted")
+		self.form = ext.replace(".", "")
 		
 	def save(self, **kwargs):
 		self.clean()
 		return super(FileVideo, self).save(**kwargs)
 
+	def __str__(self):
+		return self.name
+
 	class Meta:
 		db_table = 'storage_filevideo'
+
 
 @receiver(models.signals.post_delete, sender=FileSong)
 def auto_delete_song_on_delete(sender, instance, **kwargs):
@@ -104,6 +128,7 @@ def auto_delete_song_on_delete(sender, instance, **kwargs):
         if os.path.isfile(instance.song.path):
             os.remove(instance.song.path)
 
+
 @receiver(models.signals.post_delete, sender=FileImage)
 def auto_delete_image_on_delete(sender, instance, **kwargs):
     """
@@ -113,6 +138,7 @@ def auto_delete_image_on_delete(sender, instance, **kwargs):
     if instance.image:
         if os.path.isfile(instance.image.path):
             os.remove(instance.image.path)
+
 
 @receiver(models.signals.post_delete, sender=FileVideo)
 def auto_delete_video_on_delete(sender, instance, **kwargs):
