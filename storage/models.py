@@ -107,7 +107,7 @@ class FileImage(models.Model):
 		db_table = 'storage_fileimage'
 
 
-class FileSong(models.Model):
+class FileVideo(models.Model):
 	def upload_path(self, filename):
 		return "video/{}-{}.{}".format(self.name, self.key, filename.split(".")[-1])
 	
@@ -125,7 +125,7 @@ class FileSong(models.Model):
 	extension = models.CharField(max_length = 42, blank = True)
 	length 	  = models.DurationField(default = timedelta())
 	key 	  = models.CharField(max_length = 42, default = get_uuid)
-	song 	  = models.FileField(upload_to = upload_path, blank = True)
+	video 	  = models.FileField(upload_to = upload_path, blank = True)
 	thumbnail = models.ImageField(upload_to = upload_path_thumbnail, blank = True)
 
 	def clean(self):
@@ -137,21 +137,21 @@ class FileSong(models.Model):
 		
 	def save(self, **kwargs):
 		self.clean()
-		return super(FileSong, self).save(**kwargs)
+		return super(FileVideo, self).save(**kwargs)
 
 	def __str__(self):
 		return self.name
 
 	class Meta:
-		db_table = 'storage_filesong'
+		db_table = 'storage_filevideo'
 
 	def __str__(self):
 		return self.name
 
 
-class FileVideo(models.Model):
+class FileSong(models.Model):
 	def upload_path(self, filename):
-		return "video/{}-{}{}".format(self.name, uuid.uuid4(), os.path.splitext(filename)[1])
+		return "song/{}-{}{}".format(self.name, uuid.uuid4(), os.path.splitext(filename)[1])
 
 	def upload_path_thumbnail(self, filename):
 		return "thumbnail/{}-{}.{}".format(self.name, self.key, filename.split(".")[-1])
@@ -167,7 +167,7 @@ class FileVideo(models.Model):
 	album 	  = models.CharField(max_length = 42, blank = True)
 	artist	  = models.CharField(max_length = 42, blank = True)
 	key 	  = models.CharField(max_length = 42, default = get_uuid)
-	video	  = models.FileField(upload_to = upload_path, blank = True)
+	song	  = models.FileField(upload_to = upload_path, blank = True)
 	thumbnail = models.ImageField(upload_to = upload_path_thumbnail, blank = True)
 
 	def clean(self):
@@ -179,13 +179,13 @@ class FileVideo(models.Model):
 		
 	def save(self, **kwargs):
 		self.clean()
-		return super(FileVideo, self).save(**kwargs)
+		return super(FileSong, self).save(**kwargs)
 
 	def __str__(self):
 		return self.name
 
 	class Meta:
-		db_table = 'storage_filevideo'
+		db_table = 'storage_filesong'
 
 
 	def __str__(self):
