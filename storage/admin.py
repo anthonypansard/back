@@ -2,28 +2,24 @@ from django.contrib import admin
 from django import forms
 from .models import FileUser, FileImage, FileSong, FileVideo
 
-class FileImageAdmin(admin.ModelAdmin):
-    list_display    = ("name", "date", "form",)
-    list_filter     = ("form",)
-    readonly_fields = ("id",)
-    search_fields   = ("name", "form",)
+class FileAdmin(admin.ModelAdmin):
+    list_display    = ('name', 'filesize', 'extension',)
+    list_filter     = ('extension',)
+    readonly_fields = ('key', 'id',)
+    search_fields   = ('name',)
 
-
-class FileSongAdmin(admin.ModelAdmin):
-    list_display    = ("name", "date", "form",)
-    list_filter     = ("form",)
-    readonly_fields = ("id",)
-    search_fields   = ("name",)
-
-
-class FileVideoAdmin(admin.ModelAdmin):
-    list_display    = ("name", "date", "form",)
-    list_filter     = ("form",)
-    readonly_fields = ("id",)
-    search_fields   = ("name",)
-
+class FileImageAdmin(FileAdmin):
+    fieldsets = (
+        (None, {
+            'fields' : ('name', 'image', 'thumbnail',)
+        }),
+        ('Metadata', {
+            'fields' : ('extension', ('height', 'width'), 'date', 'gps', 'key', 'id')
+        })
+    )
+    readonly_fields = ('image', 'thumbnail', 'extension', 'height', 'width', 'date', 'gps', 'key', 'id')
 
 admin.site.register(FileUser)
 admin.site.register(FileImage, FileImageAdmin)
-admin.site.register(FileSong, FileSongAdmin)
-admin.site.register(FileVideo, FileVideoAdmin)
+admin.site.register(FileSong, FileAdmin)
+admin.site.register(FileVideo, FileAdmin)

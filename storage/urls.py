@@ -19,9 +19,15 @@ from . import views
 
 urlpatterns = [
     path('image/', views.fileImage, name = 'fileImage'),
-    path('video/', views.fileImage, name = 'fileVideo'),
-    path('song/', views.fileImage, name = 'fileSong'),
-    path('image/<int:alarm_id>/', views.detailImage, name = 'detailImage'),
-    path('video/<int:alarm_id>/', views.detailVideo, name = 'detailVideo'),
-    path('song/<int:alarm_id>/', views.detailSong, name = 'detailSong'),
+    path('video/', views.fileVideo, name = 'fileVideo'),
+    path('song/', views.fileSong, name = 'fileSong'),
+    path('image/<int:image_id>/', views.detailImage, name = 'detailImage'),
+    path('video/<int:video_id>/', views.detailVideo, name = 'detailVideo'),
+    path('song/<int:song_id>/', views.detailSong, name = 'detailSong'),
+    path('image/upload/<key>/', views.uploadImage, name = 'uploadImage'),
+    path('video/upload/<key>/', views.uploadVideo, name = 'uploadVideo'),
+    path('song/upload/<key>/', views.uploadSong, name = 'uploadSong'),
+    path('image/<int:image_id>/display/<int:beamy_id>/', views.beamyImage, name = 'beamyImage'),
+    path('song/<int:song_id>/display/<int:beamy_id>/', views.beamySong, name = 'beamySong'),
+    path('video/<int:video_id>/display/<int:beamy_id>/', views.beamyVideo, name = 'beamyVideo'),
 ]
