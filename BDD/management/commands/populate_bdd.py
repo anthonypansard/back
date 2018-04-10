@@ -40,7 +40,7 @@ beamy_user = (
 
 alarms = (
     {"beamy"    : "bedroom",
-     "day"      : "monday, tuesday, wednesday, thursday, friday",
+     "day"      : "monday,tuesday,wednesday,thursday,friday",
      "hour"     : 8,
      "minute"   : 0,
      "enabled"  : "true" },
@@ -132,7 +132,7 @@ class Command(BaseCommand):
         for a in alarms:
             try:
                 Alarm.objects.get(
-                    beamy = a['beamy'],
+                    beamy = Beamy.objects.get(name = a['beamy']),
                     day = a['day'],
                     hour = a['hour'])
             except:
