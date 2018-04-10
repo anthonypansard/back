@@ -9,12 +9,12 @@ class Alarm(models.Model):
 	Class to save alarm information in database.
 	More work needs to be done with timezone management. Maybe link each beamy to it's timezone and display the right timezone in the app ?
 	"""
-	enabled  = models.CharField(default = 'true', max_length = 42)
-	running  = models.CharField(default = 'false', max_length = 42)
-	day 	 = models.CharField(default = 'monday', max_length = 42)
-	hour 	 = models.IntegerField(default = 0)
-	minute 	 = models.IntegerField(default = 0)
-	id_beamy = models.ForeignKey(Beamy, on_delete = models.CASCADE, default = 1)
+	enabled 	= models.CharField(default = 'true', max_length = 42)
+	running 	= models.CharField(default = 'false', max_length = 42)
+	day			= models.CharField(default = 'monday', max_length = 100)
+	hour		= models.IntegerField(default = 0)
+	minute		= models.IntegerField(default = 0)
+	beamy		= models.ForeignKey(Beamy, on_delete = models.CASCADE, default = 1)
 	# lack of id_music
 	def clean(self):
 		self.day = self.day.replace(" ", "")

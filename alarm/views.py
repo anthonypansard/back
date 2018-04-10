@@ -13,7 +13,7 @@ def buildAlarmResponse(alarmList):
 
 	root = etree.Element("set")
 	for alarm in alarmList:
-		beamy = alarm.id_beamy
+		beamy = alarm.beamy
 
 		alarm_ 	 = etree.SubElement(root, "alarm")
 		alarm_id = etree.SubElement(alarm_, "alarm_id")
@@ -81,7 +81,7 @@ def alarm(request):
 						  hour = hour,
 					      minute = minute,
 						  enabled = enabled, 
-						  id_beamy = beamy)
+						  beamy = beamy)
 		
 			alarm.save()
 		
