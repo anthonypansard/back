@@ -10,23 +10,45 @@ from django.core.files import File
 
 root = os.path.join(BASE_DIR, "../../testfiles/")
 
-beamy = [
-    {"name" : "bedroom"   , "version" : "1.0", "pin" : 1234},
-    {"name" : "livingroom", "version" : "1.0", "pin" : 1111},
-    {"name" : "restroom"  , "version" : "1.0", "pin" : 4321}]
+beamy = (
+    {"name"     : "bedroom",
+     "version"  : "1.0",
+     "pin"      : 1234},
+    {"name"     : "livingroom",
+     "version"  : "1.0",
+     "pin"      : 1111},
+    {"name"     : "restroom",
+     "version"  : "1.0",
+     "pin"      : 4321})
 
-user = [
-    {"username" : "vader" , "password" : "azerty"},
-    {"username" : "solo"  , "password" : "qwerty"}]
+user = (
+    {"username" : "vader",
+     "password" : "azerty"},
+    {"username" : "solo",
+     "password" : "qwerty"})
 
-beamy_user = [
-    {"beamy" : "bedroom"   , "user" : "vader", "right" : "owner"},
-    {"beamy" : "livingroom", "user" : "solo" , "right" : "owner"},
-    {"beamy" : "restroom"  , "user" : "solo" , "right" : "owner"},]
+beamy_user = (
+    {"beamy"    : "bedroom",
+     "user"     : "vader",
+    "right"     : "owner"},
+    {"beamy"    : "livingroom",
+     "user"     : "solo",
+     "right"    : "owner"},
+    {"beamy"    : "restroom",
+     "user"     : "solo",
+     "right"    : "owner"})
 
-alarms = [
-    {"beamy" : "bedroom", "day": "monday, tuesday, wednesday, thursday, friday", "hour" :  8, "minute": 0, "enabled" : "true" },
-    {"beamy" : "bedroom", "day": "saturday"                                     , "hour" : 10, "minute": 0, "enabled" : "false"}]
+alarms = (
+    {"beamy"    : "bedroom",
+     "day"      : "monday, tuesday, wednesday, thursday, friday",
+     "hour"     : 8,
+     "minute"   : 0,
+     "enabled"  : "true" },
+    {"beamy"    : "bedroom",
+     "day"      : "saturday",
+     "hour"     : 10,
+     "minute"   : 0,
+     "enabled"  : "false"})
 
 def getFiles(ext):
     paths = []
