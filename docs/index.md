@@ -57,6 +57,8 @@ All `xml` files with alarm data embedded have the same basis structure :
 
 ```xml
 <alarm>
+    <name>alarm_name</name>
+    <!-- The alarm name -->
     <alarm_id>alarm_id</alarm_id>
     <!-- Only present in responses from the server -->
     <beamy_id>beamy_id</beamy_id>
@@ -112,6 +114,7 @@ All wrong endpoints should return a `400` code.
   <?xml version="1.0"?>
   <set>
       <alarm>
+          <name>Get up!</name>
           <alarm_id>1</alarm_id>
           <beamy_id>1</beamy_id>
           <time>
@@ -148,6 +151,7 @@ All wrong endpoints should return a `400` code.
   <?xml version="1.0"?>
   <set>
   	<alarm>
+          <name>Get up!</name>
           <alarm_id>id</alarm_id>
           <beamy_id>1</beamy_id>
           <time>
@@ -179,6 +183,7 @@ All wrong endpoints should return a `400` code.
   ```xml
   <?xml version="1.0" ?> 
   <alarm>
+      <name>Get up!</name>
       <beamy_id>2</beamy_id>
       <time>
           <day>wednesday</day>
@@ -199,6 +204,7 @@ All wrong endpoints should return a `400` code.
   ```xml
   <?xml version="1.0" ?> 
   <alarm>
+      <name>Get up!</name>
       <alarm_id>9</alarm_id>
       <beamy_id>2</beamy_id>
       <time>
