@@ -9,6 +9,7 @@ class Alarm(models.Model):
 	Class to save alarm information in database.
 	More work needs to be done with timezone management. Maybe link each beamy to it's timezone and display the right timezone in the app ?
 	"""
+	name		= models.CharField(default = 'alarm', max_length = 42)
 	enabled 	= models.CharField(default = 'true', max_length = 42)
 	running 	= models.CharField(default = 'false', max_length = 42)
 	day			= models.CharField(default = 'monday', max_length = 100)

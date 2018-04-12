@@ -40,11 +40,13 @@ beamy_user = (
 
 alarms = (
     {"beamy"    : "bedroom",
+     "name"     : "week",
      "day"      : "monday,tuesday,wednesday,thursday,friday",
      "hour"     : 8,
      "minute"   : 0,
      "enabled"  : "true" },
     {"beamy"    : "bedroom",
+     "name"     : "go running !",
      "day"      : "saturday",
      "hour"     : 10,
      "minute"   : 0,
@@ -137,7 +139,13 @@ class Command(BaseCommand):
                     hour = a['hour'])
             except:
                 b = Beamy.objects.get(name = a['beamy'])
-                alarm = Alarm(beamy = b, day = a['day'], hour = a['hour'], minute = a['minute'], enabled = a['enabled'])
+                alarm = Alarm(
+                    name = a['name'],
+                    beamy = b,
+                    day = a['day'],
+                    hour = a['hour'],
+                    minute = a['minute'],
+                    enabled = a['enabled'])
                 alarm.save()
 
     def handle(self, *args, **options):

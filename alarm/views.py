@@ -16,6 +16,7 @@ def buildAlarmResponse(alarmList):
 		beamy = alarm.beamy
 
 		alarm_ 	 = etree.SubElement(root, "alarm")
+		name	 = etree.SubElement(alarm_, "name")
 		alarm_id = etree.SubElement(alarm_, "alarm_id")
 		beamy_id = etree.SubElement(alarm_, "beamy_id")
 		time 	 = etree.SubElement(alarm_, "time")
@@ -24,6 +25,7 @@ def buildAlarmResponse(alarmList):
 		minute 	 = etree.SubElement(time, "minute")
 		enabled	 = etree.SubElement(alarm_, "enabled")
 		running	 = etree.SubElement(alarm_, "running")
+		name.text	  = str(alarm.name)
 		alarm_id.text = str(alarm.id)
 		beamy_id.text = str(beamy.id)
 		day.text 	  = str(alarm.day)
@@ -69,6 +71,7 @@ def alarm(request):
 			# print(req)
 			tree = etree.parse(StringIO(req))
 			# TODO : think about when multiple alarms are present in the POST request
+			name     = tree.xpath("/alarm/name")[0].text
 			day   	 = tree.xpath("/alarm/time/day")[0].text
 			hour 	 = int(tree.xpath("/alarm/time/hour")[0].text)
 			minute 	 = int(tree.xpath("/alarm/time/minute")[0].text)
@@ -77,11 +80,13 @@ def alarm(request):
 		
 			beamy = Beamy.objects.get(pk = beamy_id)
 			
-			alarm = Alarm(day = day,
-						  hour = hour,
-					      minute = minute,
-						  enabled = enabled, 
-						  beamy = beamy)
+			alarm = Alarm(
+				name = name,
+				day = day,
+				hour = hour,
+				minute = minute,
+				enabled = enabled, 
+				beamy = beamy)
 		
 			alarm.save()
 		
