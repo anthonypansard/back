@@ -4,7 +4,7 @@ from .models import Alarm
 # Register your models here.
 
 class AlarmAdmin(admin.ModelAdmin):
-    list_display    = ('beamy', 'enabled', 'running',)
+    list_display    = ('name', 'beamy', 'enabled', 'running',)
     list_filter     = ('beamy__id', 'enabled',)
     readonly_fields = ('id',)
     search_fields   = ('due_date', 'enabled', 'beamy__name')

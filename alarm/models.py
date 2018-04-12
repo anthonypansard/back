@@ -34,3 +34,6 @@ class Alarm(models.Model):
 
 	class Meta:
 		db_table = 'alarm_alarm'
+
+	def __str__(self):
+		return self.name
