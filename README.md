@@ -27,31 +27,43 @@ Here is the code for the server infrastructure. It is built using the python fra
 ## Requirements
 
 This project uses python `3.6` and Django `2.0`
-The python package `lxml` is also required (see [here](http://lxml.de/)).
+The following python packages are also required :
+
+* `lxml` (see [here](http://lxml.de/))
+* `python-resize-image` (see [here](https://pypi.org/project/python-resize-image/))
+* `Pillow` (see [here](https://pillow.readthedocs.io/en/5.1.x/))
 
 ## Folder structure
 
 ```
 back/
-	README.md				-> This file
-	alarm/					-> Application handling the alarms
-		admin.py			-> Customization for the default admin interface
-		models.py			-> Models for the alarm application
-		urls.py				-> Url redirections for the alarm API
-		views.py			-> Request processing and response
-	back/					-> Main folder of the project
-		settings/			-> Django settings
-			__init__.py		-> Modify this file to change the settings overide file
-			base.py			-> Main setting file
-			development.py		-> Settings overide for development environement
-			testserver.py		-> Settings overide for the test server (not gited)
-		db.sqlite3			-> Database file (not gited)
-		urls.py				-> Urls redirection for the applications
-	BDD/					-> Application hosting the main database
-		admin.py			-> Customization for the default admin interface
-		models.py			-> Main models
-	docs/					-> Documentation
-		index.md
+    README.md                   -> This file
+    alarm/                      -> Application handling the alarms
+        admin.py                -> Customization for the default admin interface
+        models.py               -> Models for the alarm application
+        urls.py                 -> Url redirections for the alarm API
+        views.py                -> Request processing and response
+    back/                       -> Main folder of the project
+        settings/               -> Django settings
+            __init__.py         -> Modify this file to change the settings overide file
+            base.py             -> Main setting file
+            development.py      -> Settings overide for development environement
+            testserver.py       -> Settings overide for the test server (not gited)
+        db.sqlite3              -> Database file (not gited)
+        urls.py                 -> Urls redirection for the applications
+    BDD/                        -> Application hosting the main database
+        management/
+            commands/
+                populate_bdd.py -> Automatically add fake data in the database
+        admin.py                -> Customization for the default admin interface
+        models.py               -> Main models
+    storage/                    -> Application hosting the file storage interface
+        admin.py                -> Customization for the default admin interface
+        models.py               -> Models for the storage application
+        urls.py                 -> Url redirections for the storage API
+        views.py                -> Request processing and response
+    docs/                       -> Documentation
+        index.md
 ```
 
 ## How to use
