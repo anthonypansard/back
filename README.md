@@ -57,6 +57,10 @@ back/
                 populate_bdd.py -> Automatically add fake data in the database
         admin.py                -> Customization for the default admin interface
         models.py               -> Main models
+    media/                      -> Media files are stored here
+        image/
+        song/
+        video/
     storage/                    -> Application hosting the file storage interface
         admin.py                -> Customization for the default admin interface
         models.py               -> Models for the storage application

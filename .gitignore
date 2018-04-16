@@ -1,3 +1,5 @@
+# Files and folder to exclude from git
+
 *.pyc
 __pycache__
 db.sqlite3
@@ -7,4 +9,12 @@ db.sqlite3
 l.sh
 back/settings/__init__testserver.py
 testserver.py
-media/
+media/image/*
+media/video/*
+media/song/*
+
+# Files and folder to keep anyway
+
+!media/image/.keep
+!media/video/.keep
+!media/song/.keep
