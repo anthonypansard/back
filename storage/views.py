@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpRequest
-from .models import FileImage, FileSong, FileVideo
+from .models import FileImage, FileSong, FileVideo, FileUser
 from datetime import datetime
 from lxml import etree
 from io import StringIO
@@ -11,7 +11,8 @@ from django.core.files.storage import default_storage
 from PIL import Image
 from resizeimage import resizeimage
 from back.settings.base import MEDIA_ROOT
-
+from django.contrib.contenttypes.models import ContentType
+from account.models import DeviceUser
 # Create your views here.
 
 def buildFileResponse(fileList, file_type):
@@ -127,9 +128,15 @@ def buildFileResponse(fileList, file_type):
 @csrf_exempt
 def fileImage(request):
 	if request.method == 'GET':
-		fileList = FileImage.objects.order_by('id')
+		token = request.GET.get('token')
+		user = DeviceUser.objects.get(token = token).user
+		fileList = FileUser.objects.filter(user = user)
+		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileImage)]
+
+		#fileList = FileImage.objects.order_by('id')
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
+		
 		content = buildFileResponse(fileList, "image")
 		return HttpResponse(content, content_type='text/xml')
 

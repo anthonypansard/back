@@ -1,5 +1,5 @@
 from django.db import models
-from BDD.models import Beamy
+from account.models import Beamy
 from django.core.exceptions import ValidationError
 
 # Create your models here.

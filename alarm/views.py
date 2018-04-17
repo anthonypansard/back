@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpRequest
-from BDD.models import Beamy
+from account.models import Beamy
 from .models import Alarm
 
 from lxml import etree

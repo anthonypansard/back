@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('BDD', '0001_initial'),
+        ('account', '0001_initial'),
     ]
 
     operations = [
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('day', models.CharField(default='monday', max_length=42)),
                 ('hour', models.IntegerField(default=0)),
                 ('minute', models.IntegerField(default=0)),
-                ('id_beamy', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='BDD.Beamy')),
+                ('id_beamy', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='account.Beamy')),
             ],
             options={
                 'db_table': 'alarm_alarm',
