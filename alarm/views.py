@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpRequest
-from account.models import Beamy
+from account.models import Beamy, BeamyUser, DeviceUser
 from .models import Alarm
 
 from lxml import etree
@@ -48,6 +48,7 @@ def buildAlarmResponse(alarmList):
 
 @csrf_exempt
 def detail(request, alarm_id):
+	# ok auth
 	"""
 	Return all relevant data about a particular Alarm object, designated by it's id (int) in a xml formated text file
 	or
@@ -65,9 +66,17 @@ def detail(request, alarm_id):
 				404			, alarm_id does not match any existing Alarm object
 	"""
 	try:
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the beamys linked to the user
+		beamyUserList = BeamyUser.objects.filter(user = user)
+		beamyList = [bu.beamy for bu in beamyUserList]
 		# We try to get the Alarm object which id is 'alarm_id'
 		# raises DoesNotExist Exception when not found
 		alarm = Alarm.objects.get(pk=alarm_id)
+		if not alarm.beamy in beamyList:
+			raise Alarm.DoesNotExist
 
 		if request.method == 'GET':
 			content = buildAlarmResponse([alarm])
@@ -85,6 +94,7 @@ def detail(request, alarm_id):
 
 @csrf_exempt
 def alarm(request):
+	# ok auth
 	"""
 	Return all relevant data about all Alarm objects in a xml formated text file
 	or
@@ -103,7 +113,16 @@ def alarm(request):
 				404			, alarm_id does not match any existing Alarm object
 	"""
 	if request.method == 'GET':
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the beamys linked to the user
+		beamyUserList = BeamyUser.objects.filter(user = user)
+		beamyList = [bu.beamy for bu in beamyUserList]
+		# We try to get the Alarm object which id is 'alarm_id'
+		# raises DoesNotExist Exception when not found
 		alarmList = Alarm.objects.order_by('id')
+		alarmList = [a for a in alarmList if a.beamy in beamyList]
 		# If there is no Alarm in the database,
 		# we send back a xml file with an empty '<set>' mark
 		if not alarmList:
@@ -116,6 +135,12 @@ def alarm(request):
 		# Only one Alarm object can be created for each request
 		# If more than one alarm need to be created, one must make many POST requests
 		try :
+			token = request.GET.get('token')
+			# Get the token's owner
+			user = DeviceUser.objects.get(token = token).user
+			# Get the list of all the beamys linked to the user
+			beamyUserList = BeamyUser.objects.filter(user = user)
+			beamyList = [bu.beamy for bu in beamyUserList]
 			# The following fields are mandatory
 			# An IndexError is raised if a field is missing
 			req = request.read().decode("utf-8")
@@ -127,8 +152,10 @@ def alarm(request):
 			enabled	 = tree.xpath("/alarm/enabled")[0].text
 			beamy_id = int(tree.xpath("/alarm/beamy_id")[0].text)
 
-			# The beamy object must exist
+			# The beamy object must exist and by owned by the user 
 			beamy = Beamy.objects.get(pk = beamy_id)
+			if not beamy in beamyList:
+				return HttpResponse('Bad data : "beamy_id" is not valid', status = 422) 
 			
 			alarm = Alarm(
 				name = name,

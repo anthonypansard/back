@@ -27,7 +27,8 @@ def build_user_response(user, token):
     return content
 
 
-def user_auth(request):
+def userAuth(request):
+    # ok auth
     if request.method == 'GET':
         username = request.GET.get('username')
         password = request.GET.get('password')
@@ -58,5 +59,5 @@ def user_auth(request):
     else:
         return HttpResponse(status = 200)
 
-def add_device(request):
+def addDevice(request):
     pass

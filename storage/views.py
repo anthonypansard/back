@@ -127,13 +127,16 @@ def buildFileResponse(fileList, file_type):
 
 @csrf_exempt
 def fileImage(request):
+	# ok auth
 	if request.method == 'GET':
 		token = request.GET.get('token')
+		# Get the token's owner
 		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the files linked to the user
 		fileList = FileUser.objects.filter(user = user)
-		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileImage)]
+		# Retrive all files wich ContentType is FileImage and to which the token's owner has 'owner' rights
+		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileImage) and i.right == "owner"]
 
-		#fileList = FileImage.objects.order_by('id')
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
 		
@@ -141,6 +144,11 @@ def fileImage(request):
 		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':
+		token = request.GET.get('token')
+		print(token)
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+
 		try:
 			req 		= request.read().decode("utf-8")
 			tree 		= etree.parse(StringIO(req))
@@ -149,6 +157,12 @@ def fileImage(request):
 
 			file = FileImage(name = name)
 			file.save()
+
+			file_user = FileUser(
+				user = user,
+				content_object = file,
+				right = "owner")
+			file_user.save()
 
 			content = "<?xml version=\"1.0\"?>\n"
 			print(content)

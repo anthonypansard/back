@@ -18,6 +18,6 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.user_auth, name = 'user_auth'),
-    path('device/imei/', views.add_device, name = 'add_device'),
+    path('', views.userAuth, name = 'userAuth'),
+    path('device/imei/', views.addDevice, name = 'addDevice'),
 ]
