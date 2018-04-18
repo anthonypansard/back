@@ -67,6 +67,8 @@ def detail(request, alarm_id):
 	"""
 	try:
 		token = request.GET.get('token')
+		if not token:
+			return HttpResponse("You did not send your token along", status = 400)
 		# Get the token's owner
 		user = DeviceUser.objects.get(token = token).user
 		# Get the list of all the beamys linked to the user
@@ -92,6 +94,7 @@ def detail(request, alarm_id):
 
 	except Alarm.DoesNotExist:
 		raise Http404("The requested alarm does not exist")
+
 
 @csrf_exempt
 def alarm(request):
