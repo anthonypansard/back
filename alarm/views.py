@@ -75,6 +75,7 @@ def detail(request, alarm_id):
 		# We try to get the Alarm object which id is 'alarm_id'
 		# raises DoesNotExist Exception when not found
 		alarm = Alarm.objects.get(pk=alarm_id)
+		# Check if the user is owner of the beamy
 		if not alarm.beamy in beamyList:
 			raise Alarm.DoesNotExist
 
@@ -110,7 +111,6 @@ def alarm(request):
 								- it might no be a POST or GET request
 								- the url requested might not be exactly the same as defined in ./urls.py
 				422			, the data did not contain all the mandatory fields some fields was invalid
-				404			, alarm_id does not match any existing Alarm object
 	"""
 	if request.method == 'GET':
 		token = request.GET.get('token')

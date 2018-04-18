@@ -20,4 +20,6 @@ from . import views
 urlpatterns = [
     path('', views.userAuth, name = 'userAuth'),
     path('device/imei/', views.addDevice, name = 'addDevice'),
+    path('beamy/', views.beamyAuth, name = 'beamyAuth'),
+    path('beamy/<int:beamy_id>/', views.beamyAuthDetail, name = 'beamyAuthDetail'),
 ]
