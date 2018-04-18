@@ -12,9 +12,12 @@
 
 The "inc56" project is a complete infrastructure including :
 
-* *A connected multimedia object* that can be remotely controled
-* *A mobile device* with an application to manage the client account / the connected object
-* *A server infrastructure* to hold data and manage the interactions between the mobile device and the connected object
+* *A connected multimedia object*
+  The connected object can be anything. We chose for testing purposes to focus on a connected videoprojector
+* *A mobile device*
+  Used to control the connected object by sending diverse commands to the connected object and display user data and files stored on the server. We built an Android application that can be found [here](https://github.com/INC56/app_project)
+* *A server infrastructure*
+  Holding user accounts, dealing with user authentification and making the link between the mobile devices and the connected objects
 
 This project takes part of a first year course at the engineer school CentraleSupélec.
 
@@ -37,12 +40,6 @@ The following python packages are also required :
 
 ```
 back/
-    README.md                   -> This file
-    alarm/                      -> Application handling the alarms
-        admin.py                -> Customization for the default admin interface
-        models.py               -> Models for the alarm application
-        urls.py                 -> Url redirections for the alarm API
-        views.py                -> Request processing and response
     back/                       -> Main folder of the project
         settings/               -> Django settings
             __init__.py         -> Modify this file to change the settings overide file
@@ -51,23 +48,30 @@ back/
             testserver.py       -> Settings overide for the test server (not gited)
         db.sqlite3              -> Database file (not gited)
         urls.py                 -> Urls redirection for the applications
-    BDD/                        -> Application hosting the main database
+    account/                    -> Application hosting authentification logic
         management/
             commands/
                 populate_bdd.py -> Automatically add fake data in the database
         admin.py                -> Customization for the default admin interface
         models.py               -> Main models
-    media/                      -> Media files are stored here
-        image/
-        song/
-        video/
+        urls.py                 -> Urls redirection for the authentification API
+    alarm/                      -> Application handling the alarms
+        admin.py                -> Customization for the default admin interface
+        models.py               -> Models for the alarm application
+        urls.py                 -> Url redirections for the alarm API
+        views.py                -> Request processing and response
     storage/                    -> Application hosting the file storage interface
         admin.py                -> Customization for the default admin interface
         models.py               -> Models for the storage application
         urls.py                 -> Url redirections for the storage API
         views.py                -> Request processing and response
+    media/                      -> Media files are stored here
+        image/
+        song/
+        video/
     docs/                       -> Documentation
         index.md
+    README.md                   -> This file
 ```
 
 ## How to use
