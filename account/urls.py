@@ -19,7 +19,8 @@ from . import views
 
 urlpatterns = [
     path('', views.userAuth, name = 'userAuth'),
-    path('device/imei/', views.addDevice, name = 'addDevice'),
+    path('device/', views.deviceAuth, name = 'deviceAuth'),
     path('beamy/', views.beamyAuth, name = 'beamyAuth'),
+    path('device/<int:device_id>/', views.deviceAuthDetail, name = 'deviceAuthDetail'),
     path('beamy/<int:beamy_id>/', views.beamyAuthDetail, name = 'beamyAuthDetail'),
 ]
