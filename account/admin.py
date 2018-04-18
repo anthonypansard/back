@@ -12,22 +12,22 @@ class DeviceAdmin(admin.ModelAdmin):
     search_fields   = ('name', 'imei',)
 
 class BeamyAdmin(admin.ModelAdmin):
-    list_display    = ('name', 'pin', 'id_version', 'id',)
-    list_filter     = ('id_version',)
+    list_display    = ('name', 'pin', 'version', 'id',)
+    list_filter     = ('version',)
     readonly_fields = ('id',)
     search_fields   = ('name', 'code_PIN',)
 
 class BeamyUserAdmin(admin.ModelAdmin):
-    list_display    = ('id_beamy', 'id_user', 'right', 'id',)
-    list_filter     = ('id_beamy','id_user','right',)
+    list_display    = ('beamy', 'user', 'right', 'id',)
+    list_filter     = ('beamy','user','right',)
     readonly_fields = ('id',)
-    search_fields   = ('id_beamy', 'id_user',)
+    search_fields   = ('beamy', 'user',)
 
 class DeviceUserAdmin(admin.ModelAdmin):
-    list_display    = ('id_device','id_user', 'id',)
-    list_filter     = ('id_device','id_user',)
+    list_display    = ('device','user', 'id',)
+    list_filter     = ('device','user',)
     readonly_fields = ('id',)
-    search_fields   = ('id_device', 'id_user',)
+    search_fields   = ('device', 'user',)
 
 
 admin.site.register(Device, DeviceAdmin)

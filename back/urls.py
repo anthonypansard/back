@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/alarm/', include('alarm.urls')),
     path('api/files/', include('storage.urls')),
+    path('api/auth/', include('account.urls')),
 ]
 
 # Be careful when deployding to production

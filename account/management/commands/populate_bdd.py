@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from BDD.models import Beamy, BeamyUser
+from account.models import Beamy, BeamyUser
 from storage.models import FileImage, FileSong, FileVideo, FileUser
 from alarm.models import Alarm
 from django.contrib.auth.models import User
@@ -23,9 +23,9 @@ beamy = (
 
 user = (
     {"username" : "vader",
-     "password" : "azerty"},
+     "password" : "azerty123456789"},
     {"username" : "solo",
-     "password" : "qwerty"})
+     "password" : "qwerty123456789"})
 
 beamy_user = (
     {"beamy"    : "bedroom",
@@ -70,7 +70,7 @@ class Command(BaseCommand):
                 Beamy.objects.get(name=b["name"])
 
             except:
-                newb = Beamy(name=b["name"], id_version=b["version"], pin=b["pin"])
+                newb = Beamy(name=b["name"], version=b["version"], pin=b["pin"])
                 newb.save()
 
     def _create_user(self):
@@ -79,19 +79,20 @@ class Command(BaseCommand):
                 User.objects.get(username=u["username"])
 
             except:
-                newu = User(username=u["username"], password=u["password"])
+                # newu = User(username=u["username"], password=u["password"])
+                newu = User.objects.create_user(u["username"], '', u["password"])
                 newu.save()
 
     def _create_beamy_user(self):
         for bu in beamy_user:
             try:
                 BeamyUser.objects.get(
-                    id_beamy__name=bu["beamy"], id_user__username=bu["user"])
+                    beamy__name=bu["beamy"], user__username=bu["user"])
 
             except:
                 u = User.objects.get(username=bu["user"])
                 b = Beamy.objects.get(name=bu["beamy"])
-                newbu = BeamyUser(id_beamy=b, id_user=u, right=bu["right"])
+                newbu = BeamyUser(beamy=b, user=u, right=bu["right"])
                 newbu.save()
 
     def _create_image(self):

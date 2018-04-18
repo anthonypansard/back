@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('pin', models.BigIntegerField()),
             ],
             options={
-                'db_table': 'bdd_beamy',
+                'db_table': 'account_beamy',
             },
         ),
         migrations.CreateModel(
@@ -31,11 +31,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('right', models.CharField(max_length=42)),
-                ('id_beamy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='BDD.Beamy')),
+                ('id_beamy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='account.Beamy')),
                 ('id_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'db_table': 'bdd_beamyuser',
+                'db_table': 'account_beamyuser',
             },
         ),
         migrations.CreateModel(
@@ -46,18 +46,18 @@ class Migration(migrations.Migration):
                 ('imei', models.BigIntegerField()),
             ],
             options={
-                'db_table': 'bdd_device',
+                'db_table': 'account_device',
             },
         ),
         migrations.CreateModel(
             name='DeviceUser',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('id_device', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='BDD.Device')),
+                ('id_device', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='account.Device')),
                 ('id_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'db_table': 'bdd_deviceuser',
+                'db_table': 'account_deviceuser',
             },
         ),
         migrations.CreateModel(
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ('link', models.CharField(max_length=42)),
             ],
             options={
-                'db_table': 'bdd_settings',
+                'db_table': 'account_settings',
             },
         ),
     ]

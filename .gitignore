@@ -1,5 +1,6 @@
 # Files and folder to exclude from git
 
+.vscode/*
 *.pyc
 __pycache__
 db.sqlite3

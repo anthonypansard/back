@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpRequest
-from .models import FileImage, FileSong, FileVideo
+from .models import FileImage, FileSong, FileVideo, FileUser
 from datetime import datetime
 from lxml import etree
 from io import StringIO
@@ -11,7 +11,8 @@ from django.core.files.storage import default_storage
 from PIL import Image
 from resizeimage import resizeimage
 from back.settings.base import MEDIA_ROOT
-
+from django.contrib.contenttypes.models import ContentType
+from account.models import DeviceUser
 # Create your views here.
 
 def buildFileResponse(fileList, file_type):
@@ -126,14 +127,27 @@ def buildFileResponse(fileList, file_type):
 
 @csrf_exempt
 def fileImage(request):
+	# ok auth
 	if request.method == 'GET':
-		fileList = FileImage.objects.order_by('id')
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the files linked to the user
+		fileList = FileUser.objects.filter(user = user)
+		# Retrive all files wich ContentType is FileImage and to which the token's owner has 'owner' rights
+		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileImage) and i.right == "owner"]
+
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
+		
 		content = buildFileResponse(fileList, "image")
 		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+
 		try:
 			req 		= request.read().decode("utf-8")
 			tree 		= etree.parse(StringIO(req))
@@ -142,6 +156,12 @@ def fileImage(request):
 
 			file = FileImage(name = name)
 			file.save()
+
+			file_user = FileUser(
+				user = user,
+				content_object = file,
+				right = "owner")
+			file_user.save()
 
 			content = "<?xml version=\"1.0\"?>\n"
 			print(content)
@@ -161,13 +181,25 @@ def fileImage(request):
 
 def fileVideo(request):
 	if request.method == 'GET':
-		fileList = FileVideo.objects.order_by('id')
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the files linked to the user
+		fileList = FileUser.objects.filter(user = user)
+		# Retrive all files wich ContentType is FileImage and to which the token's owner has 'owner' rights
+		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileVideo) and i.right == "owner"]
+
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
+		
 		content = buildFileResponse(fileList, "video")
 		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+
 		try:
 			req 		= request.read().decode("utf-8")
 			tree 		= etree.parse(StringIO(req))
@@ -176,6 +208,12 @@ def fileVideo(request):
 
 			file = FileVideo(name = name)
 			file.save()
+
+			file_user = FileUser(
+				user = user,
+				content_object = file,
+				right = "owner")
+			file_user.save()
 
 			content = "<?xml version=\"1.0\"?>\n"
 			print(content)
@@ -195,9 +233,17 @@ def fileVideo(request):
 
 def fileSong(request):
 	if request.method == 'GET':
-		fileList = FileSong.objects.order_by('id')
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the files linked to the user
+		fileList = FileUser.objects.filter(user = user)
+		# Retrive all files wich ContentType is FileImage and to which the token's owner has 'owner' rights
+		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileSong) and i.right == "owner"]
+
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
+		
 		content = buildFileResponse(fileList, "song")
 		return HttpResponse(content, content_type='text/xml')
 
@@ -210,6 +256,12 @@ def fileSong(request):
 
 			file = FileImage(name = name)
 			file.save()
+
+			file_user = FileUser(
+				user = user,
+				content_object = file,
+				right = "owner")
+			file_user.save()
 
 			content = "<?xml version=\"1.0\"?>\n"
 			print(content)
