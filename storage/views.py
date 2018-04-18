@@ -145,7 +145,6 @@ def fileImage(request):
 
 	elif request.method == 'POST':
 		token = request.GET.get('token')
-		print(token)
 		# Get the token's owner
 		user = DeviceUser.objects.get(token = token).user
 
@@ -182,13 +181,25 @@ def fileImage(request):
 
 def fileVideo(request):
 	if request.method == 'GET':
-		fileList = FileVideo.objects.order_by('id')
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the files linked to the user
+		fileList = FileUser.objects.filter(user = user)
+		# Retrive all files wich ContentType is FileImage and to which the token's owner has 'owner' rights
+		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileVideo) and i.right == "owner"]
+
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
+		
 		content = buildFileResponse(fileList, "video")
 		return HttpResponse(content, content_type='text/xml')
 
 	elif request.method == 'POST':
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+
 		try:
 			req 		= request.read().decode("utf-8")
 			tree 		= etree.parse(StringIO(req))
@@ -197,6 +208,12 @@ def fileVideo(request):
 
 			file = FileVideo(name = name)
 			file.save()
+
+			file_user = FileUser(
+				user = user,
+				content_object = file,
+				right = "owner")
+			file_user.save()
 
 			content = "<?xml version=\"1.0\"?>\n"
 			print(content)
@@ -216,9 +233,17 @@ def fileVideo(request):
 
 def fileSong(request):
 	if request.method == 'GET':
-		fileList = FileSong.objects.order_by('id')
+		token = request.GET.get('token')
+		# Get the token's owner
+		user = DeviceUser.objects.get(token = token).user
+		# Get the list of all the files linked to the user
+		fileList = FileUser.objects.filter(user = user)
+		# Retrive all files wich ContentType is FileImage and to which the token's owner has 'owner' rights
+		fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileSong) and i.right == "owner"]
+
 		if not fileList :
 			return HttpResponse("Empty list", status = 500)
+		
 		content = buildFileResponse(fileList, "song")
 		return HttpResponse(content, content_type='text/xml')
 
@@ -231,6 +256,12 @@ def fileSong(request):
 
 			file = FileImage(name = name)
 			file.save()
+
+			file_user = FileUser(
+				user = user,
+				content_object = file,
+				right = "owner")
+			file_user.save()
 
 			content = "<?xml version=\"1.0\"?>\n"
 			print(content)
