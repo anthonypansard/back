@@ -688,3 +688,669 @@ All wrong endpoints should return a `400` code.
 
 Timezones are not yet well managed. We need to make sure each alarm rings at the right time in the right timezone.
 For example, we live in `Europe/Paris` but Django default timezone is `UTC`.
+
+## Storage
+
+File data is exchanged with the mobile device and the connected object using an API we designed
+
+All xml files about video have the same basis structure :
+ 
+ ```xml
+<video>
+     <file_id> file_id </file_id>
+     <link> link from MEDIAROOT </link>
+     <name> video_name </name>
+     <filesize> filesize</filesize>
+     <resolution> resolution </resolution>
+     <date>
+         <year>2018</year>
+         <!—Should be an int --!>
+         <month>4</month>
+         <!—Should be an int in the range [1, 12] --!>
+         <day>1</day>
+         <!—Should be an int in the range [1, 31] --!>
+         <hour>14</hour>
+         <!—Should be an int in the range [0, 23] --!>
+         <minute>29</minute>
+         <!—Should be an int in the range [0, 59] --!>
+         <second>57</second>
+         <!—Should be an int in the range [0, 59] --!>
+     </date>
+     <format> format </format>
+     <!—Should be an accepted format : mp4, avi, mkv !-->
+     <length> length </length>
+</video>
+  ```
+
+All xml files about image have the same basis structure :
+
+```xml
+<image>
+        <file_id> file_id </file_id>
+        <link> link from MEDIAROOT </link>
+        <name> image_name </name>
+        <filesize> filesize</filesize>
+        <resolution> resolution </resolution>
+        <date>
+             <year>2018</year>
+             <!—Should be an int --!>
+             <month>4</month>
+             <!—Should be an int in the range [1, 12] --!>
+             <day>1</day>
+             <!—Should be an int in the range [1, 31] --!>
+             <hour>14</hour>
+             <!—Should be an int in the range [0, 23] --!>
+             <minute>29</minute>
+             <!—Should be an int in the range [0, 59] --!>
+             <second>57</second>
+             <!—Should be an int in the range [0, 59] --!>
+        </date>
+        <gps> GPS_position </gps>
+        <format> format </format>
+        <!—Should be an accepted format : jpeg, jpg, png !-->
+</image>
+```
+
+All xml files about song have the same basis structure :
+
+```xml
+<song>
+      <file_id> file_id </file_id>
+      <link> link from MEDIAROOT </link>
+      <name> song_name </name>
+      <filesize> filesize</filesize>
+      <resolution> resolution </resolution>
+      <date>
+           <year>2018</year>
+           <!—Should be an int --!>
+           <month>4</month>
+           <!—Should be an int in the range [1, 12] --!>
+           <day>1</day>
+           <!—Should be an int in the range [1, 31] --!>
+           <hour>14</hour>
+           <!—Should be an int in the range [0, 23] --!>
+           <minute>29</minute>
+           <!—Should be an int in the range [0, 59] --!>
+           <second>57</second>
+           <!—Should be an int in the range [0, 59] --!>
+      </date>
+      <format> format </format>
+      <!—Should be an accepted format : mp3, wma !-->
+      <length> length </length>
+      <album> album_name </album>
+<artist> artist_name </artist>
+</song>
+```
+
+All values are treated as strings an no quotation marks are needed
+
+All wrong endpoints should return a 400 code
+
+### Save an image on storage
+	
+#### First step :
+
+- **URL :**
+
+POST ~/api/files/image
+
+-	**URL Param :**
+
+None
+
+- **Data Param :**
+
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<image>
+<name> image_name </name>
+</image>
+```
+
+-	**Success response :**
+
+Code : 200
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+	<image>
+		<key> key_image </key>
+	</image>
+</set>
+```
+
+#### Second step :
+
+- **URL :**
+
+POST ~/api/files/image/upload/key
+The key is the key given by the first step
+
+- **URL Param :**
+
+Key
+
+- **Data Param :**
+
+Content : Files 
+
+- **Success reponse :**
+
+HttpResponse : Success
+
+- **Error reponse :**
+
+Code : 404
+Message : This key does not exist
+
+### Save a video on storage
+	
+#### First step :
+
+-	**URL :**
+
+POST ~/api/files/video
+
+-	**URL Param :**
+
+None
+
+-	**Data Param :**
+
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<video>
+  <name> video_name </name>
+</video>
+```
+
+- **Success reponse :**
+
+Code : 200
+
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+	<video>
+		<key> key_video </key>
+	</video>
+</set>
+```
+
+#### Second step :
+
+-	**URL :**
+
+POST ~/api/files/video/upload/key
+The key is the key given by the first step
+
+- **URL Param :**
+
+Key
+
+- **Data Param :**
+
+Content : Files 
+
+- **Success reponse :**
+
+HttpResponse : Success
+
+- **Error reponse :**
+
+Code : 404
+Message : This key does not exist
+
+### Save a song on storage
+	
+#### First step :
+
+- **URL :**
+
+POST ~/api/files/song
+
+- **URL Param :**
+
+None
+
+- **Data Param :**
+
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<song>
+  <name> song_name </name>
+</song>
+```
+
+-	**Success reponse :**
+
+Code : 200
+Content : text/xml
+```xml
+<?xml version=”1.0”?>
+<set>
+	<song>
+		<key> key_song </key>
+	</song>
+</set>
+```
+
+#### Second step :
+- **URL :**
+
+POST ~/api/files/song/upload/key
+The key is the key given by the first step
+
+- **URL Param :**
+
+Key
+
+- **Data Param :**
+
+Content : Files 
+
+-	**Success reponse :**
+
+HttpResponse : Success
+
+- **Error reponse :**
+
+Code : 404
+Message : This key does not exist
+
+### Get image list 
+
+- **URL :**
+
+GET ~/api/files/image
+
+- **URL Param :**
+
+None
+
+-	**Data Param :**
+
+None
+
+- **Success reponse :**
+
+Code : 200
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+     <image>
+         <file_id> file_id </file_id>
+         <link> link from MEDIAROOT </link>
+         <name> image_name </name>
+         <filesize> filesize</filesize>
+         <resolution> resolution </resolution>
+         <date>
+              <year>2018</year>
+              <month>4</month>
+              <day>1</day>
+              <hour>14</hour>
+              <minute>29</minute>
+              <second>57</second>
+         </date>
+         <gps> GPS_position </gps>
+         <format> format </format>
+     </image>
+     <image>
+      …
+     </image>
+</set>
+```
+
+### Get a specific image
+
+- **URL :**
+
+GET ~/api/files/image/int:id
+
+- **URL Param :**
+
+Id
+
+- **Data Param :**
+
+None
+
+- **Success reponse :**
+
+Code : 200
+
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+     <image>
+           <file_id> file_id </file_id>
+           <link> link from MEDIAROOT </link>
+           <name> image_name </name>
+           <filesize> filesize</filesize>
+           <resolution> resolution </resolution>
+           <date>
+                <year>2018</year>
+                <month>4</month>
+                <day>1</day>
+                <hour>14</hour>
+                <minute>29</minute>
+                <second>57</second>
+           </date>
+           <gps> GPS_position </gps>
+           <format> format </format>
+     </image>
+</set>
+```
+
+- **Error response :**
+
+Code : 404
+Return if id does not correspond to any internal image id
+
+### Delete a specific image
+
+- **URL :**
+
+DELETE ~/api/files/image/int:id
+
+- **URL Param :**
+
+id
+
+-	**Data Param :**
+
+None
+
+- **Success reponse :**
+
+Code : 200
+
+Content : “hello”
+
+- **Error response :**
+
+Code : 404
+Return if id does not correspond to any internal image id
+
+### Get video list 
+
+- **URL :**
+
+GET ~/api/files/video
+
+- **URL Param :**
+
+None
+
+- **Data Param :**
+
+None
+
+- **Success reponse :**
+
+Code : 200
+
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+         <video>
+               <file_id> file_id </file_id>
+               <link> link from MEDIAROOT </link>
+               <name> video_name </name>
+               <filesize> filesize</filesize>
+               <resolution> resolution </resolution>
+               <date>
+                   <year>2018</year>
+                   <month>4</month>
+                   <day>1</day>
+                   <hour>14</hour>
+                   <minute>29</minute>
+                   <second>57</second>
+               </date>
+               <format> format </format>
+               <length> length </length>
+         </video>
+         <video>
+          …
+         </video>
+</set>
+```
+
+### Get a specific video
+
+- **URL :**
+
+GET ~/api/files/video/int:id
+
+- **URL Param :**
+
+Id
+
+- **Data Param :**
+
+None
+
+- **Success reponse :**
+
+Code : 200
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+     <video>
+          <file_id> file_id </file_id>
+          <link> link from MEDIAROOT </link>
+          <name> video_name </name>
+          <filesize> filesize</filesize>
+          <resolution> resolution </resolution>
+          <date>
+              <year>2018</year>
+              <month>4</month>
+              <day>1</day>
+              <hour>14</hour>
+              <minute>29</minute>
+              <second>57</second>
+          </date>
+          <format> format </format>
+          <length> length </length>
+     </video>
+</set>
+```
+
+- **Error response :**
+
+Code : 404
+Return if id does not correspond to any internal video id
+
+### Delete a specific video
+
+- **URL :**
+
+DELETE ~/api/files/video/int:id
+
+-	**URL Param :**
+
+id
+
+- **Data Param :**
+
+None
+
+-	**Success reponse :**
+
+Code : 200
+Content : “hello”
+
+- **Error response :**
+
+Code : 404
+Return if id does not correspond to any internal video id
+
+### Get song list 
+
+- **URL :**
+
+GET ~/api/files/song
+
+- **URL Param :**
+
+None
+
+-	**Data Param :**
+
+None
+
+-	**Success reponse :**
+
+Code : 200
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+     <song>
+          <file_id> file_id </file_id>
+          <link> link from MEDIAROOT </link>
+          <name> song_name </name>
+          <filesize> filesize</filesize>
+          <resolution> resolution </resolution>
+          <date>
+              <year>2018</year>
+              <month>4</month>
+              <day>1</day>
+              <hour>14</hour>
+              <minute>29</minute>
+              <second>57</second>
+          </date>
+          <format> format </format>
+          <length> length </length>
+          <album> album_name </album>
+          <artist> artist_name </artist>
+     </song>	
+     <song>
+      …
+     </song>
+</set>
+```
+
+### Get a specific song
+
+- **URL :**
+
+GET ~/api/files/song/int:id
+
+- **URL Param :**
+
+Id
+
+- **Data Param :**
+
+None
+
+- **Success reponse :**
+
+Code : 200
+Content : text/xml
+
+```xml
+<?xml version=”1.0”?>
+<set>
+   <song>
+       <file_id> file_id </file_id>
+       <link> link from MEDIAROOT </link>
+       <name> song_name </name>
+       <filesize> filesize</filesize>
+       <resolution> resolution </resolution>
+       <date>
+           <year>2018</year>
+           <month>4</month>
+           <day>1</day>
+           <hour>14</hour>
+           <minute>29</minute>
+           <second>57</second>
+       </date>
+       <format> format </format>
+       <length> length </length>
+       <album> album_name </album>
+       <artist> artist_name </artist>
+   </song>
+</set>
+```
+
+•	Error response :
+Code : 404
+Return if id does not correspond to any internal song id
+
+### Delete a specific song
+
+- **URL :**
+
+DELETE ~/api/files/song/int:id
+
+- **URL Param :**
+
+id
+
+- **Data Param :**
+
+None
+
+- **Success reponse :**
+
+Code : 200
+Content : “hello”
+
+- **Error response :**
+
+Code : 404
+Return if id does not correspond to any internal song id
+
+### Get the thumbnail of a specific image 
+
+- **URL :**
+
+GET ~/api/files/image/int:id/thumb
+
+- **Url Param :**
+
+Id
+
+- **Data Param :**
+
+None
+
+- **Success response :**
+
+Code: 200
+
+Content : text/xml
+
+````xml
+<?xml version=”1.0”?>
+<set>
+	<image>
+		<link> link_thumbnail </link>
+	</image>
+</set>
+```
+
+- **Error response :**
+Code : 404
+Return if id does not correspond to any internal image id
