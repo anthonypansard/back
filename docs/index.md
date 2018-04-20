@@ -1342,7 +1342,7 @@ Code: 200
 
 Content : text/xml
 
-````xml
+```xml
 <?xml version=”1.0”?>
 <set>
 	<image>
