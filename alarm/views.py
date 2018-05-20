@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpRequest
 from account.models import Beamy, BeamyUser, DeviceUser
+from storage.models import FileSong, FileUser
 from .models import Alarm
 
 from lxml import etree
 from io import StringIO
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.contenttypes.models import ContentType
 # Create your views here.
 
 def buildAlarmResponse(alarmList):
@@ -34,6 +36,7 @@ def buildAlarmResponse(alarmList):
 		minute 	 = etree.SubElement(time, "minute")
 		enabled	 = etree.SubElement(alarm_, "enabled")
 		running	 = etree.SubElement(alarm_, "running")
+		tone	 = etree.SubElement(alarm_, "ringtone")
 		name.text	  = str(alarm.name)
 		alarm_id.text = str(alarm.id)
 		beamy_id.text = str(beamy.id)
@@ -42,6 +45,7 @@ def buildAlarmResponse(alarmList):
 		minute.text   = str(alarm.minute)
 		enabled.text  = str(alarm.enabled)
 		running.text  = str(alarm.running)
+		tone.text 	  = str(alarm.tone.song.url)
 	
 	content += etree.tostring(root, pretty_print=True).decode()
 	return content
@@ -155,7 +159,7 @@ def alarm(request):
 			enabled	 = tree.xpath("/alarm/enabled")[0].text
 			beamy_id = int(tree.xpath("/alarm/beamy_id")[0].text)
 
-			# The beamy object must exist and by owned by the user 
+			# The beamy object must exist and be owned by the user 
 			beamy = Beamy.objects.get(pk = beamy_id)
 			if not beamy in beamyList:
 				return HttpResponse('Bad data : "beamy_id" is not valid', status = 422) 
@@ -167,7 +171,24 @@ def alarm(request):
 				minute = minute,
 				enabled = enabled, 
 				beamy = beamy)
-		
+
+			# If the user provided a custom ringtone, we set the Alarm object accordingly
+			try:
+				tone = int(tree.xpath("/alarm/ringtone")[0].text)
+				print(tone)
+				# Get the list of all the files linked to the user
+				fileList = FileUser.objects.filter(user = user)
+				print(fileList)
+				# Retrieve all files wich ContentType is FileSong and to which the token's owner has 'owner' rights
+				fileList = [i.content_object for i in fileList if i.content_type == ContentType.objects.get_for_model(FileSong) and i.right == "owner"]
+				print(fileList)
+				tone = FileSong.objects.get(pk = tone)
+				if tone in fileList :
+					alarm.tone = tone
+			
+			except:
+				pass
+
 			alarm.save()
 		
 		except Beamy.DoesNotExist:
