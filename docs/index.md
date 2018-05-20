@@ -461,6 +461,11 @@ All `xml` files with alarm data embedded have the same basis structure :
     <!-- Should be an element {true, false} -->
     <running>false</running>
     <!-- Only present in responses from the server -->
+    <ringtone>/media/song/default_ringtone_1111111111-49c05df1-3829-4506-9bab-d54d21c77ac7.mp3</ringtone>
+    <!--
+    Link to the ringtone file
+    Post request must contain a song id or nothing in this field
+    -->
 </alarm>
 ```
 
@@ -502,6 +507,7 @@ All wrong endpoints should return a `400` code.
           </time>
           <enabled>true</enabled>
           <running>false</running>
+          <ringtone>/media/song/default_ringtone_1111111111-49c05df1-3829-4506-9bab-d54d21c77ac7.mp3</ringtone>
       </alarm>
       <alarm>
       ...
@@ -539,6 +545,7 @@ All wrong endpoints should return a `400` code.
           </time>
           <enabled>true</enabled>
           <running>false</running>
+          <ringtone>/media/song/default_ringtone_1111111111-49c05df1-3829-4506-9bab-d54d21c77ac7.mp3</ringtone>
       </alarm>
   </set>
   ```
@@ -568,8 +575,11 @@ All wrong endpoints should return a `400` code.
           <minute>56</minute>
       </time>
       <enabled>true</enabled>
+      <ringtone>3</ringtone>
   </alarm>
   ```
+
+  If no valid `ringtone` is provided, a default ringtone will be used
 
 - **Success reponse :**
 
@@ -590,6 +600,7 @@ All wrong endpoints should return a `400` code.
       </time>
       <enabled>true</enabled>
       <running>false</running>
+      <ringtone>/media/song/default_ringtone_1111111111-49c05df1-3829-4506-9bab-d54d21c77ac7.mp3</ringtone>
   </alarm>
   ```
 
