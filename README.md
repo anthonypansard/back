@@ -56,6 +56,9 @@ back/
         models.py               -> Main models
         urls.py                 -> Urls redirection for the authentification API
     alarm/                      -> Application handling the alarms
+        management/
+            commands/
+                init_alarm.py   -> Automatically add default ringtone in the database
         admin.py                -> Customization for the default admin interface
         models.py               -> Models for the alarm application
         urls.py                 -> Url redirections for the alarm API
@@ -67,6 +70,7 @@ back/
         views.py                -> Request processing and response
     media/                      -> Media files are stored here
         image/
+        ringtone/               -> Used to store the default ringtone before first run
         song/
         video/
     docs/                       -> Documentation
