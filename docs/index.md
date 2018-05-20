@@ -18,7 +18,7 @@
   - [Start and stop alarm](#start-and-stop-alarm)
   - [Delete alarm](#delete-alarm)
 - [Storage](#storage)
-  - [Save a file on storage](#save-a_file-on-storage)
+  - [Save a file on storage](#save-a-file-on-storage)
   - [Get image or video or song list](#get-image-or-video-or-song-list)
   - [Delete an image or video or song](#delete-an-image-or-video-or-song)
 
