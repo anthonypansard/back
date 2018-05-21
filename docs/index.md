@@ -47,6 +47,8 @@ Add the default ringtone to the database
 python manage.py init_alarm # only before first run
 ```
 
+> It seems not to work. Please add the file "back/media/ringtone/default_ringtone_1111111111.mp3" as a song in the server's storage manually using Django's administration interface. (The name must be "default_ringtone_1111111111")
+
 Run the server
 
 ```sh
