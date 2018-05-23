@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from storage.models import FileSong
-from alarm.models import Alarm
 import os
 from back.settings.base import BASE_DIR
 from storage.models import EXT_SONG
