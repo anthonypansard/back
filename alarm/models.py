@@ -3,6 +3,13 @@ from account.models import Beamy
 from storage.models import FileSong
 from django.core.exceptions import ValidationError
 
+
+def default_ringtone():
+	try:
+		return FileSong.objects.get(name = "default_ringtone_1111111111").id
+	except:
+		return 1
+
 # Create your models here.
 
 class Alarm(models.Model):
@@ -17,7 +24,7 @@ class Alarm(models.Model):
 	hour	= models.IntegerField(default = 0)
 	minute	= models.IntegerField(default = 0)
 	beamy	= models.ForeignKey(Beamy, on_delete = models.CASCADE, default = 1)
-	tone	= models.ForeignKey(FileSong, on_delete = models.SET_DEFAULT, default = FileSong.objects.get(name = "default_ringtone_1111111111").id)
+	tone	= models.ForeignKey(FileSong, on_delete = models.SET_DEFAULT, default = default_ringtone)
 	# The possibility to choose the alarm's music (a song the client has uploaded before in the storage space) is not yet implemented
 
 	# This function is called before saving the Alarm object in the database
