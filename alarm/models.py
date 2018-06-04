@@ -44,6 +44,22 @@ class Alarm(models.Model):
 		# The Alarm can either be enabled -> 'true' or disabled -> 'false'
 		if self.enabled not in ('true', 'false'):
 			raise ValidationError('Bad data : "enabled" value should be "true" or "false"')
+
+	def is_valid(self):
+		self.day = self.day.replace(" ", "")
+		if not set(self.day.split(",")).issubset(
+				["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]):
+			return False
+		elif self.hour > 24 or self.hour < 0 or type(self.hour) != int:
+			return False
+		elif type(self.minute) != int or self.minute > 60 or self.minute < 0:
+			return False
+		elif not self.enabled in ("true", "false"):
+			return False
+		elif not self.running in ("true", "false"):
+			return False
+		else:
+			return True
 	
 	# This overides the save method and call clean() before saving any Alarm object
 	def save(self, **kwargs):

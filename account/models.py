@@ -7,7 +7,14 @@ import uuid
 class Device(models.Model):
 	name = models.CharField(max_length = 42, default = 'device')
 	imei = models.CharField(max_length = 42)
-	
+
+	def is_valid(self):
+		if type(self.name) == str and type(self.imei) == int:
+			return True
+		else:
+			return False
+
+
 	def __str__(self):
 		return self.name
 	
